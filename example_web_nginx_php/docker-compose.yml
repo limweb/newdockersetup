@@ -2,6 +2,7 @@ version: "2.1"
 services:
   nginxweb:
     image: "limweb/docker-nginx-fw74"
+    # image: "richarvey/nginx-php-fpm:latest"
     container_name: nginxweb
     working_dir: /var/www/html
     restart: "no"
