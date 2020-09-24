@@ -1,0 +1,27 @@
+version: "2.1"
+
+services:
+
+  jenkins:
+    image: limweb/jenkins-dind:latest
+    user: root
+    privileged: true
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      VIRTUAL_HOST: "jenkins.eventpass.co"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "jenkins.eventpass.co"
+      LETSENCRYPT_EMAIL: "limweb@hotmail.com"      
+    volumes:
+      - "jenkins-data:/var/jenkins_home"
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  jenkins-data:
+
+networks:
+  default:
+    external:
+      name: nginx-network

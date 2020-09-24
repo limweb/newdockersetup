@@ -1,0 +1,36 @@
+version: '3.5'
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    hostname: "your git website.com"
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: "your git website.com"
+      VIRTUAL_PORT: "80"
+      LETSENCRYPT_HOST: "your git website.como"
+      LETSENCRYPT_EMAIL: "your email.com"
+      GITLAB_OMNIBUS_CONFIG: |
+        gitlab_rails['gitlab_shell_ssh_port'] = 8822
+    ports:
+      - "8001:80"
+      - "8822:22"
+    volumes:
+      - ./gitlab/config:/etc/gitlab
+      - ./gitlab/data:/var/opt/gitlab
+      - ./gitlab/logs:/var/log/gitlab
+    networks:
+      - nginx-network
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    restart: unless-stopped
+    depends_on:
+      - gitlab
+    volumes:
+      - ./config/gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:

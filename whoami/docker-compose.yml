@@ -1,0 +1,11 @@
+version: "2.1"
+
+services:
+  virtual:
+    image: jwilder/whoami:latest
+    restart: always
+    container_name: whoami.com
+    environment:
+      VIRTUAL_HOST: whoami.com
+      VIRTUAL_PORT: 8000
+

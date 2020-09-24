@@ -1,0 +1,24 @@
+version: "2.1"
+services:
+  nginxweb:
+    image: "limweb/docker-nginxfpm-fw74"
+    container_name: nginxwebdev
+    working_dir: /var/www/html
+    restart: "no"
+    # for swoole if use nginx commnt  command
+    # command: "/usr/local/bin/php /var/www/html/swoole.php"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php:/var/www/html
+    environment:
+      VIRTUAL_HOST: "your website.com"
+      VIRTUAL_PORT: "80"
+      LETSENCRYPT_HOST: "your website.como"
+      LETSENCRYPT_EMAIL: "your email.com"      
+    network_mode:  "bridge"
+
+networks:
+  default:
+    external:
+      name: nginx-network
