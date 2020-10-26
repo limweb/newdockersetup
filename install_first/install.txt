@@ -15,3 +15,8 @@ sudo docker network create nginx-network
 //---------------- end -------------------
 sudo docker-compose  up -d //example
 sudo docker-compose -f ./mariadb.yml up -d   //example
+
+//------ add port 2375 for docker api -------------------
+//path /lib/systemd/system/docker.service
+//edit ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2375
+//run systemctl daemon-reload
