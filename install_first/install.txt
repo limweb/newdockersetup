@@ -20,6 +20,8 @@ sudo docker-compose -f ./mariadb.yml up -d   //example
 //path /lib/systemd/system/docker.service
 //edit ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2375
 //run systemctl daemon-reload
+//sudo systemctl daemon-reload
+//sudo systemctl restart docker.service
 
 //----- docker--client----
 docker -H tcp://18.141.166.248:2375 info
