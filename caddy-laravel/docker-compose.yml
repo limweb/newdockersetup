@@ -6,5 +6,3 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - 8080:2015
-    volumes:
-      - .:/srv/app
