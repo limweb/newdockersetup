@@ -1,0 +1,14 @@
+version: "2.1"
+services:
+  caddy-whoami:
+    image: "jwilder/whoami"
+    ontainer_name: caddy-whoami
+    labels:
+      - "virtual.host=web3.eventpassdev.com"
+      - "virtual.tls-email=limweb@hotmail.com" # ssl is now on
+      - "virtual.port=8000" # exposed port of this container
+      
+networks:
+  default:
+    external:
+      name: proxy-network

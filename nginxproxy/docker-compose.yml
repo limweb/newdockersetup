@@ -1,17 +1,6 @@
 version: "2.1"
 
 services:
-  portainer:
-    image: portainer/portainer
-    container_name: portainer
-    ports:
-      - 9000:9000
-      - 8000:8000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer:/data
-    restart: always
-
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: nginx-proxy
@@ -39,10 +28,7 @@ services:
     volumes_from:
       - nginx-proxy
 
-volumes:
-  jenkins-data:
-
 networks:
   default:
     external:
-      name: nginx-network
+      name: proxy-network

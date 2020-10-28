@@ -1,0 +1,19 @@
+version: "3"
+services:
+  phpweb: # this is your service
+    image: "abiosoft/caddy:php"
+    ontainer_name: phpweb
+    labels:
+      - "virtual.host=myapp.com" # your domain
+      - "virtual.alias=www.myapp.com" # alias for your domain (optional)
+      - "virtual.port=80" # exposed port of this container
+      - "virtual.tls-email=admin@myapp.com" # ssl is now on
+      - "virtual.auth.username=admin" # Optionally add http basic authentication
+      - "virtual.auth.password=JDJ5JDEyJEJCdzJYM0pZaWtMUTR4UVBjTnRoUmVJeXQuOC84QTdMNi9ONnNlbDVRcHltbjV3ME1pd2pLCg==" # By specifying both username and password hash
+  volumes:
+      - ./php:/srv
+
+networks:
+  default:
+    external:
+      name: proxy-network

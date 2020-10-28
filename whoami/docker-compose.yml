@@ -9,3 +9,7 @@ services:
       VIRTUAL_HOST: whoami.com
       VIRTUAL_PORT: 8000
 
+networks:
+  default:
+    external:
+      name: proxy-network
