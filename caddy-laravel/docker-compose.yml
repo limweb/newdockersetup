@@ -1,0 +1,20 @@
+version: "3"
+services:
+  phpweb: # this is your service
+    image: "abiosoft/caddy:php"
+    container_name: phpweb
+    ports:
+      - "2015:2015"
+    volumes:
+      - ./:/srv
+      - caddy-root:/root/.caddy
+      - ./docker/Caddyfile:/etc/Caddyfile
+
+volumes:
+  caddy-file:
+  caddy-root:
+
+networks:
+  default:
+    external:
+      name: proxy-network

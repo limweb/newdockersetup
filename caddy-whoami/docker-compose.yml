@@ -2,7 +2,7 @@ version: "2.1"
 services:
   caddy-whoami:
     image: "jwilder/whoami"
-    ontainer_name: caddy-whoami
+    container_name: caddy-whoami
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on

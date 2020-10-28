@@ -2,7 +2,7 @@ version: "3"
 services:
   phpweb: # this is your service
     image: "abiosoft/caddy:php"
-    ontainer_name: phpweb
+    container_name: phpweb
     ports:
       - "80:80"
       - "443:443"
