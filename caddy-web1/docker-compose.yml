@@ -3,8 +3,8 @@ services:
   web1.shopsthai.com:
     image: "abiosoft/caddy:no-stats"
     container_name: web1.shopsthai.com
-    ports:
-      - "2015:2015"
+    # ports:
+      # - "2015:2015"
     labels:
       - "virtual.host=web1.shopsthai.com"
       - "virtual.tls-email=limweb@hotmail.com" # ssl is now on
