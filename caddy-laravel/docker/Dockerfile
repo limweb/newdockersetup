@@ -1,14 +1,5 @@
-FROM php:7.1-fpm
-LABEL maintainer="Paul Redmond <paul@bitpress.io>"
-
-# Install application dependencies
-RUN curl --silent --show-error --fail --location \
-      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/linux/amd64?plugins=http.expires,http.realip&license=personal" \
-    | tar --no-same-owner -C /usr/bin/ -xz caddy \
-    && chmod 0755 /usr/bin/caddy \
-    && /usr/bin/caddy -version \
-    && docker-php-ext-install mbstring pdo pdo_mysql
+FROM abiosoft/caddy:php
+LABEL maintainer="Lin Shenghai <limweb@hotmail.com>"
 
 COPY . /srv/app
 COPY docker/Caddyfile /etc/Caddyfile
@@ -16,4 +7,5 @@ COPY docker/Caddyfile /etc/Caddyfile
 WORKDIR /srv/app/
 RUN chown -R www-data:www-data /srv/app
 
-CMD ["/usr/bin/caddy", "--conf", "/etc/Caddyfile", "--log", "stdout"]
+ENTRYPOINT ["/bin/parent", "caddy"]
+CMD ["--conf", "/etc/Caddyfile", "--log", "stdout", "--agree=$ACME_AGREE"]
