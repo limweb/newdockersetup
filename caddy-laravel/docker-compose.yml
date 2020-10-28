@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8080:2015
+    volumes:
+      - .:/srv/app

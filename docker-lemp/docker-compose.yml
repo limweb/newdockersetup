@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  docker-lemp:
+    image: adhocore/lemp:7.4
+    container_name: docker-lemp
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 8080:80
+    labels:
+      - "virtual.host=your_website.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=80" # exposed port of this container           
+    environment:
+      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_PORT: "80"
+      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_EMAIL: "your@email.com"      
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: dbname
+      MYSQL_USER: dbusr
+      MYSQL_PASSWORD: dbpass
+
+volumes:
+  db_data: {}
+
+networks:
+  default:
+    external:
+      name: proxy-network  
