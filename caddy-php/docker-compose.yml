@@ -6,6 +6,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "2105:2015"
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
