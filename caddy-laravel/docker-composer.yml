@@ -1,0 +1,31 @@
+version: "3"
+services:
+  phpweb: # this is your service
+    image: "abiosoft/caddy:php"
+    ontainer_name: phpweb
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "virtual.host=your_website.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=8000" # exposed port of this container
+    environment:
+      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_EMAIL: "your@email.com"   
+    volumes:
+      - ./:/srv
+      - caddy-root:/root/.caddy
+      - ./docker/Caddyfile:/etc/Caddyfile
+
+volumes:
+  caddy-file:
+  caddy-root:
+
+
+networks:
+  default:
+    external:
+      name: proxy-network
