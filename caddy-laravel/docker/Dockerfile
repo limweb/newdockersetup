@@ -2,6 +2,7 @@ FROM abiosoft/caddy:php as install
 LABEL maintainer="Lin Shenghai <limweb@hotmail.com>"
 WORKDIR /srv
 COPY composer.json   /srv/composer.json
+COPY composer.lock   /srv/composer.lock
 RUN composer install
 
 FROM install as composer 
