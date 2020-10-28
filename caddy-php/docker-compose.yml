@@ -1,6 +1,6 @@
 version: "3"
 services:
-  phpweb: # this is your service
+  phpweb: 
     image: "abiosoft/caddy:php"
     container_name: phpweb
     ports:
@@ -18,14 +18,7 @@ services:
       LETSENCRYPT_EMAIL: "your@email.com"   
     volumes:
       - ./php:/srv
-      - caddy-root:/root/.caddy
-      - caddy-file:/etc/Caddyfile
-
-volumes:
-  caddy-file:
-  caddy-root:
-
-
+      
 networks:
   default:
     external:
