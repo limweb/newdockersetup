@@ -1,0 +1,17 @@
+version: "2.1"
+services:
+  web1.shopsthai.com:
+    image: "abiosoft/caddy"
+    container_name: web1.shopsthai.com
+    ports:
+      - "2015:2015"
+    labels:
+      - "virtual.host=web1.shopsthai.com"
+      - "virtual.tls-email=limweb@hotmail.com" # ssl is now on
+      - "virtual.port=2015" # exposed port of this container
+    volumes:
+      - ./:/srv      
+networks:
+  default:
+    external:
+      name: proxy-network
