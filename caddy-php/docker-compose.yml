@@ -16,9 +16,14 @@ services:
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "your_website.com"
       LETSENCRYPT_EMAIL: "your@email.com"   
+      ACME_AGREE: true
+
     volumes:
       - ./php:/srv
-      
+      - caddycerts-data:/etc/caddycerts
+volumes:
+  caddycerts-data:
+
 networks:
   default:
     external:
