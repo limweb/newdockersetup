@@ -1,3 +1,6 @@
+# docker-compose exec phpweb composer install
+# docker-compose exec phpweb chmod 777 -R /srv/storage
+
 version: "3"
 services:
   phpweb: # this is your service
