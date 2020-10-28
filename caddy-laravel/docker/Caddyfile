@@ -1,5 +1,6 @@
 0.0.0.0
 root /srv/public
+browse
 gzip
 fastcgi / 127.0.0.1:9000 php
 rewrite {
@@ -10,4 +11,4 @@ rewrite {
 
 log stdout
 errors stdout
-on startup php-fpm --nodaemonize
+on startup php-fpm7 --nodaemonize

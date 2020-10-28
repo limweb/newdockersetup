@@ -7,12 +7,7 @@ services:
       - "2015:2015"
     volumes:
       - ./:/srv
-      - caddy-root:/root/.caddy
       - ./docker/Caddyfile:/etc/Caddyfile
-
-volumes:
-  caddy-file:
-  caddy-root:
 
 networks:
   default:
