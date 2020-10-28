@@ -1,8 +1,10 @@
-FROM abiosoft/caddy:php as install 
+FROM abiosoft/caddy:php
 LABEL maintainer="Lin Shenghai <limweb@hotmail.com>"
-WORKDIR /srv
-COPY . /srv/app
+
+COPY . /srv
 COPY docker/Caddyfile /etc/Caddyfile
+
+WORKDIR /srv
 RUN composer install
 
 ENTRYPOINT ["/bin/parent", "caddy"]
