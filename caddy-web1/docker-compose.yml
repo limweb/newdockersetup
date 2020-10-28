@@ -1,16 +1,16 @@
 version: "2.1"
 services:
-  web2.shopsthai.com:
-    image: "abiosoft/caddy"
-    container_name: web2.shopsthai.com
+  web1.shopsthai.com:
+    image: "abiosoft/caddy:no-stats"
+    container_name: web1.shopsthai.com
     ports:
       - "2015:2015"
     labels:
-      - "virtual.host=web2.shopsthai.com"
+      - "virtual.host=web1.shopsthai.com"
       - "virtual.tls-email=limweb@hotmail.com" # ssl is now on
       - "virtual.port=2015" # exposed port of this container
     volumes:
-      - ./:/srv      
+      - ./dist:/srv      
 networks:
   default:
     external:
