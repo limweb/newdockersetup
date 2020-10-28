@@ -5,7 +5,7 @@ COPY . /srv/app
 COPY docker/Caddyfile /etc/Caddyfile
 
 WORKDIR /srv/app/
-RUN chown -R www-data:www-data /srv/app
+RUN composer install
 
 ENTRYPOINT ["/bin/parent", "caddy"]
 CMD ["--conf", "/etc/Caddyfile", "--log", "stdout", "--agree=$ACME_AGREE"]
