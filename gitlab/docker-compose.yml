@@ -2,13 +2,17 @@ version: '3.5'
 services:
   gitlab:
     image: gitlab/gitlab-ce:latest
-    hostname: "your git website.com"
+    hostname: "your_git.com"
     restart: unless-stopped
+    labels:
+      - "virtual.host=your_git.com" # your domain
+      - "virtual.port=80" # exposed port of this container
+      - "virtual.tls-email=your@email.com" # ssl is now on    
     environment:
-      VIRTUAL_HOST: "your git website.com"
+      VIRTUAL_HOST: "your_git.com"
       VIRTUAL_PORT: "80"
-      LETSENCRYPT_HOST: "your git website.como"
-      LETSENCRYPT_EMAIL: "your email.com"
+      LETSENCRYPT_HOST: "your_git.com"
+      LETSENCRYPT_EMAIL: "your@email.com"
       GITLAB_OMNIBUS_CONFIG: |
         gitlab_rails['gitlab_shell_ssh_port'] = 8822
     ports:

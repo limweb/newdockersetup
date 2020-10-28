@@ -4,10 +4,16 @@ services:
   virtual:
     image: jwilder/whoami:latest
     restart: always
-    container_name: whoami.com
+    container_name: your_whoami.com
+    labels:
+      - "virtual.host=your_whoami.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=8000" # exposed port of this container
     environment:
-      VIRTUAL_HOST: whoami.com
+      VIRTUAL_HOST: your_whoami.com
       VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: "your_whoami.com"
+      LETSENCRYPT_EMAIL: "your@email.com"      
 
 networks:
   default:

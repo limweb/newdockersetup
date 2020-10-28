@@ -3,15 +3,27 @@ services:
   phpweb: # this is your service
     image: "abiosoft/caddy:php"
     ontainer_name: phpweb
+    ports:
+      - "80:80"
+      - "443:443"
     labels:
-      - "virtual.host=myapp.com" # your domain
-      - "virtual.alias=www.myapp.com" # alias for your domain (optional)
-      - "virtual.port=80" # exposed port of this container
-      - "virtual.tls-email=admin@myapp.com" # ssl is now on
-      - "virtual.auth.username=admin" # Optionally add http basic authentication
-      - "virtual.auth.password=JDJ5JDEyJEJCdzJYM0pZaWtMUTR4UVBjTnRoUmVJeXQuOC84QTdMNi9ONnNlbDVRcHltbjV3ME1pd2pLCg==" # By specifying both username and password hash
-  volumes:
+      - "virtual.host=your_website.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=8000" # exposed port of this container
+    environment:
+      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_EMAIL: "your@email.com"   
+    volumes:
       - ./php:/srv
+      - caddy-root:/root/.caddy
+      - caddy-file:/etc/Caddyfile
+
+volumes:
+  caddy-file:
+  caddy-root:
+
 
 networks:
   default:

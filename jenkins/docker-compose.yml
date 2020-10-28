@@ -9,11 +9,15 @@ services:
     ports:
       - "8080:8080"
       - "50000:50000"
+    labels:
+      - "virtual.host=your_jenkins.com" # your domain
+      - "virtual.port=8080" # exposed port of this container
+      - "virtual.tls-email=your@email.com" # ssl is now on
     environment:
-      VIRTUAL_HOST: "jenkins.eventpass.co"
+      VIRTUAL_HOST: "your_jenkins.com"
       VIRTUAL_PORT: "8080"
-      LETSENCRYPT_HOST: "jenkins.eventpass.co"
-      LETSENCRYPT_EMAIL: "limweb@hotmail.com"      
+      LETSENCRYPT_HOST: "your_jenkins.com"
+      LETSENCRYPT_EMAIL: "your@email.com"      
     volumes:
       - "jenkins-data:/var/jenkins_home"
       - /var/run/docker.sock:/var/run/docker.sock
