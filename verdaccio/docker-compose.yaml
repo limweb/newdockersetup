@@ -1,0 +1,17 @@
+version: '2.1'
+services:
+  verdaccio:
+    container_name: verdaccio/verdaccio
+    labels:
+      - "virtual.host=your_website.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=8000" # exposed port of this container
+    environment:
+      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_PORT: "8000"
+      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_EMAIL: "your@email.com"   
+    ports:
+      - 4873:4873
+    volumes:
+      - ./verdaccio:/verdaccio/storage
