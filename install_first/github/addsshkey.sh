@@ -3,6 +3,7 @@ git config --global user.email = "your_git@email.com"
 
 ssh-keygen -t rsa -b 4096 -C "your_git@email.com"
 ssh-keygen -t rsa -b 4096 -C "company" -f "id_rsa_company"
+
 #now you havs id_rsa and id_rsa.pub 
 # mv id_rsa* ./.ssh
 # cd .ssh
