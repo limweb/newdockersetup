@@ -9,12 +9,6 @@ services:
     environment:
       POSTGRES_PASSWORD: dbpass
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
 networks:
   default:
     external:
