@@ -20,9 +20,9 @@ services:
     image: "limweb/caddyphpsqlsrv:latest"
     container_name: phpweb
     ports:
-      - "80:2015"
+      - "8888:2015"
     expose:
-      - "80"      
+      - "8888"      
     volumes:
       - ./php:/srv
       - caddycerts-data:/etc/caddycerts
