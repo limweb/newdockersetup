@@ -1,0 +1,37 @@
+version: "2.1"
+services:
+  mssql:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: mssql
+    restart: "always"
+    ports:
+      - "1433:1433"
+    expose:
+      - "1443"
+    labels:
+      com.docker.compose.project: "mssql"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "mssql2017@pass"
+    volumes:
+      - data-mssqlvolume:/var/opt/mssql 
+
+  phpweb: 
+    image: "limweb/caddyphpsqlsrv:latest"
+    container_name: phpweb
+    ports:
+      - "80:2015"
+    expose:
+      - "80"      
+    volumes:
+      - ./php:/srv
+      - caddycerts-data:/etc/caddycerts
+
+volumes:
+  data-mssqlvolume:
+  caddycerts-data:
+
+networks:
+  default:
+    external:
+      name: proxy-network
