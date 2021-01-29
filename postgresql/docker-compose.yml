@@ -8,6 +8,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: dbpass
+      TZ: GMT+7
+      PGTZ: GMT+7
 
 networks:
   default:
