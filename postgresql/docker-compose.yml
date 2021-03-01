@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  db:
+  dbpostgresql:
     image: postgres
     restart: always
     ports:
@@ -10,7 +10,8 @@ services:
       POSTGRES_PASSWORD: dbpass
       TZ: GMT+7
       PGTZ: GMT+7
-
+    volumes:
+      - ./sqldata:/var/lib/postgresql/data
 networks:
   default:
     external:
