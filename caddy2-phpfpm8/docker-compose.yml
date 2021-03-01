@@ -1,0 +1,33 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.1"
+services:
+  phpcaddy2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "limweb/caddy2php74"
+    container_name: phpcaddy2
+    working_dir: /var/www/html
+    restart: "always"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - ./php:/var/www/html
+    labels:
+      com.docker.compose.project: "phpcaddy2"
+      virtual.host: "phpcaddy2.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      VIRTUAL_HOST: "phpcaddy2.local.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "phpcaddy2.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+
+networks:
+  default:
+    external:
+      name: proxy-network
+
