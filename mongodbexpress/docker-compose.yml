@@ -1,9 +1,9 @@
 #  docker-compose -f docker-compose.yml config check validate config
 version: "3.1"
 services:
-  mongo:
+  mongodb2:
     image: "mongo"
-    container_name: mongo
+    container_name: mongodb2
     restart: "always"
     ports:
       - "27017-27019:27017-27019"
@@ -12,7 +12,7 @@ services:
     volumes:
       - ./mongo-volume:/data/db
     labels:
-      com.docker.compose.project: "mongo"
+      com.docker.compose.project: "mongodbforexpress"
     environment:
       - "MONGO_INITDB_ROOT_USERNAME=dbuser"
       - "MONGO_INITDB_ROOT_PASSWORD=dbpass"
