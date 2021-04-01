@@ -12,6 +12,7 @@ services:
       - ./nginx/conf:/etc/nginx/conf.d
       - ./nginx/certs:/etc/nginx/certs:ro
       - ./nginx/vhost:/etc/nginx/vhost.d
+      - ./nginx/htpasswd:/etc/nginx/htpasswd
       - ./nginx/html:/usr/share/nginx/html
 
   nginx-proxy-le:

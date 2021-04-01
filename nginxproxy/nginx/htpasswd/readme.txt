@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/34490451/securing-a-docker-container-with-http-basic-auth/34491013#34491013
