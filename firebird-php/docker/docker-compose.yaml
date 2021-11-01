@@ -1,0 +1,60 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "2.1"
+services:
+  phpfirebird:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "phpfirebird:v1"
+    container_name: phpfirebird
+    working_dir: /var/www/html
+    restart: "always"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    labels:
+      com.docker.compose.project: "phpfirebird"
+      virtual.host: "yourdomain.om"
+      virtual.tls-email: your@mail.com
+      virtual.port: "8080"
+    environment:
+      VIRTUAL_HOST: "yourdomain.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "yourdomain.com"
+      LETSENCRYPT_EMAIL: your@mail.com
+    volumes:
+      - ../php:/var/www/html/
+      - ../dbs:/firebird/data/
+    depends_on:
+      - firebird
+    links:
+      - firebird
+
+  firebird:
+    image: jacobalberty/firebird:v2.5.9-sc
+    container_name: firebird
+    ports:
+      - "3050:3050"
+    expose:
+      - "3050"
+    volumes:
+      - ../dbs:/firebird/data/
+    environment:
+      ISC_PASSWORD: masterkey
+      TZ: Asia/Bangkok
+  firebird3:
+    image: jacobalberty/firebird:v3.0.7
+    container_name: firebird3
+    ports:
+      - "3050"
+    volumes:
+      - ../dbs:/firebird/data/
+    environment:
+      ISC_PASSWORD: masterkey
+      TZ: Asia/Bangkok
+networks:
+  default:
+    external:
+      name: proxy-network
+

@@ -1,0 +1,12 @@
+{
+    "require": {
+        "phpseclib/phpseclib": "^3.0",
+        "jacwright/restserver": "^1.2",
+        "illuminate/database": "^8.20",
+        "illuminate/events": "^8.20",
+        "symfony/var-dumper": "^5.3",
+        "vlucas/phpdotenv": "^5.3",
+        "bshaffer/oauth2-server-php": "^1.11",
+        "harrygulliford/laravel-firebird": "^2.4"
+    }
+}
