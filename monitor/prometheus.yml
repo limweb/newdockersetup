@@ -12,15 +12,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets:
-      - 172.31.29.233:9323
-
-  # - job_name: caddy
-  #   scheme: https
-  #   tls_config:
-  #     insecure_skip_verify: true
-  #   static_configs:
-  #     - targets:
-  #       - testphp.shopsthai.com
+      - <privateip>:9323
 
   - job_name: caddy
     scrape_interval: 5s

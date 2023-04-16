@@ -38,8 +38,12 @@ services:
     ports:
       - 3079:3000
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=innoveladmin
+      - GF_SECURITY_ADMIN_PASSWORD=password
     depends_on:
       - prometheus
       - cadvisor
 
+networks:
+  default:
+    external: 
+      name: proxy-network
