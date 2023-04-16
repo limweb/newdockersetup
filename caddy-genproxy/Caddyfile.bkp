@@ -1,0 +1,81 @@
+{{ $hosts := groupByLabel $ "virtual.host" }}
+
+{{ if not $hosts }}
+
+127.0.0.1:2015 {
+  log {
+      output stdout
+  }
+}
+
+
+{{ else }}
+
+{{ range $h, $containers := $hosts }}
+{{ $c := first $containers }}
+{{ $allhosts := trim (index $c.Labels "virtual.host") }}
+{{ range $t, $host := split $allhosts " " }}
+{{ $tlsEmail := trim (index $c.Labels "virtual.tls-email") }}
+{{ $tlsConfig := trim (index $c.Labels "virtual.tls") }}
+{{ $tlsEnv := or $tlsEmail $tlsConfig }}
+{{ $tlsOff := eq $tlsEnv "" }}
+{{ $tlsOn := ne $tlsEnv "" }}
+{{ $alias := trim (index $c.Labels "virtual.alias") }}
+{{ $aliasPresent := ne $alias "" }}
+{{ $authUsername := trim (index $c.Labels "virtual.auth.username") }}
+{{ $authPassword := trim (index $c.Labels "virtual.auth.password") }}
+{{ $authPath := trim (index $c.Labels "virtual.auth.path") }}
+{{ $basicauth := and (ne $authUsername "") (ne $authPassword "") }}
+{{ $hostDirectives := trim (index $c.Labels "virtual.host.directives") }}
+{{ $hostImport := trim (index $c.Labels "virtual.host.import") }}
+{{ $proxyMatcher := trim (index $c.Labels "virtual.proxy.matcher") }}
+{{ $proxyDirectives := trim (index $c.Labels "virtual.proxy.directives") }}
+{{ $proxyLBPolicy := or (trim (index $c.Labels "virtual.proxy.lb_policy")) "round_robin" }}
+{{ $proxyImport := trim (index $c.Labels "virtual.proxy.import") }}
+
+{{ if $aliasPresent  }}
+{{ if $tlsOff }}http://{{ end }}{{ $alias }} {
+  redir {{ if $tlsOff }}http://{{ else }}https://{{ end }}{{ $host }}
+}
+{{ end }}
+
+{{ if $tlsOff }}http://{{ end }}{{ $host }} {
+  {{ if $tlsOn }}tls {{ $tlsEnv }}{{ end }}
+
+  {{ $hostDirectives }}
+  {{ if $hostImport }}import {{ $hostImport }}{{ end }}
+
+  {{ if $basicauth }}
+  basicauth {{ $authPath }} {
+      {{ $authUsername }} {{ $authPassword }}
+  }
+  {{ end }}
+
+  reverse_proxy {{ $proxyMatcher }} {
+    lb_policy {{ $proxyLBPolicy }}
+    {{ $proxyDirectives }}
+    {{ if $proxyImport }}import {{ $proxyImport }}{{ end }}
+    {{ range $i, $container := $containers }}
+    {{ range $j, $net := $container.Networks }}
+    {{ $port := or (trim (index $container.Labels "virtual.port")) "80" }}
+    to {{ $net.IP }}:{{ $port }}
+    header_up X-Real-IP {remote_host}
+    header_up X-Tlen-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    {{ end }}
+    {{ end }}
+  }
+
+  encode zstd gzip
+  log {
+    output stdout
+  }
+}
+{{ end }}
+{{ end }}
+
+{{ end }}
+
+:2015
+
+metrics  /metrics

@@ -1,0 +1,29 @@
+scrape_configs:
+  - job_name: prometheus
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - prometheus:9090
+      - node-exporter:9100
+      - pushgateway:9091
+      - cadvisor:8080
+
+  - job_name: docker
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - 172.31.29.233:9323
+
+  # - job_name: caddy
+  #   scheme: https
+  #   tls_config:
+  #     insecure_skip_verify: true
+  #   static_configs:
+  #     - targets:
+  #       - testphp.shopsthai.com
+
+  - job_name: caddy
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - caddy-gen-proxy:2015

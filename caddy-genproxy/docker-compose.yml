@@ -8,14 +8,16 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro # needs socket to read events
       - caddy-info:/data/caddy # needs volume to back up certificates
       - caddy-data:/root/.caddy
+      - ./Caddyfile.bkp:/code/docker-gen/templates/Caddyfile.bkp
     ports:
       - "80:80"
       - "443:443"
+      - "2015"
 volumes:
   caddy-data:
   caddy-info:
 
 networks:
   default:
-    external:
+    external: 
       name: proxy-network
