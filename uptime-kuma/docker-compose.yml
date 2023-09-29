@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - uptime-kuma:/app/data
+    ports:
+      - "3001:3001"  # <Host Port>:<Container Port>
+    labels:
+      - "virtual.host=your_website.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=2015" # exposed port of this container
+    restart: always
+
+volumes:
+  uptime-kuma:
+
+networks:
+  default:
+    external:
+      name: proxy-network
