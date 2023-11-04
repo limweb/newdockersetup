@@ -14,7 +14,7 @@ services:
       - ./html:/usr/share/nginx/html
     labels:
       com.docker.compose.project: "nginxunpriviled"
-      virtual.host: "nyour_website.co"
+      virtual.host: "your_website.co"
       virtual.tls-email: your@email.com
       virtual.port: "8080"
     environment:
