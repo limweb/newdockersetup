@@ -1,0 +1,30 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "2.1"
+services:
+  nginxunpriviled:
+    image: "nginxinc/nginx-unprivileged:stable"
+    container_name: nginxunpriviled
+    working_dir: /srv/
+    restart: "always"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    labels:
+      com.docker.compose.project: "nginxunpriviled"
+      virtual.host: "nyour_website.co"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_EMAIL: your@email.com
+
+networks:
+  default:
+    external:
+      name: proxy-network
+
