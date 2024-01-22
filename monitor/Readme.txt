@@ -1,7 +1,13 @@
-grafana dashboard id 14280
-grafana Node Explorer dashboard id 1860
-dashboard.json  for import custom dashboard
+Gafana Dashboard ID:
 
+Caddy exporter  14280
+Docker and system monitoring 893
+Docker monitoring 193
+Node Exporter Full 1860
+Node Exporter Full with Node Name 10242 
+
+
+dashboard.json  for import custom dashboard
 
 daemon.json    
 {
@@ -12,6 +18,3 @@ systemctl restart docker
 systemctl status docker
 
 used with docker daemon.json
-grafana docker dashboard id 179
-grafana docker dashboard id 893
-grafana docker dashboard id 193

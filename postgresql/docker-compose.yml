@@ -7,12 +7,32 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: dbpass
+      POSTGRES_PASSWORD: dbpass_your_database_password
       TZ: GMT+7
       PGTZ: GMT+7
     volumes:
       - ./sqldata:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: your@email.com
+      PGADMIN_DEFAULT_PASSWORD: yourpassword
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    labels:
+      - "virtual.host=pgadmin3.youdomain.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=80" # exposed port of this container
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    restart: always
+
+
 networks:
   default:
     external:
       name: proxy-network
+
+volumes:
+    pgadmin:

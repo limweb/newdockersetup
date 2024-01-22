@@ -3,40 +3,69 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    restart: "always"    
     ports:
       - 3090:9090
+    labels:
+      virtual.host: "prometheus.local.com"
+      virtual.tls-email: your@mail.com
+      virtual.port: "9090"         
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
       - cadvisor
+  
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
     container_name: cadvisor
+    restart: "always"    
     ports:
       - 8080
+    labels:
+      virtual.host: "cadvisor.local.com"
+      virtual.tls-email: your@mail.com
+      virtual.port: "8080"            
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+  
   pushgateway:
     image: prom/pushgateway
     container_name: pushgateway
+    restart: "always"    
     ports:
       - 9091
+    labels:
+      virtual.host: "pushgateway.local.com"
+      virtual.tls-email: your@mail.com
+      virtual.port: "9091"      
+  
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
-    restart: unless-stopped
+    restart: "always"    
     expose:
       - 9100
+    labels:
+      virtual.host: "node-exporter.local.com"
+      virtual.tls-email: your@mail.com
+      virtual.port: "9100"
+
   grafana:
     image: grafana/grafana
     container_name: grafana
+    restart: "always"        
     ports:
       - 3079:3000
+      - :/srv/
+    labels:
+      virtual.host: "grafana.local.com"
+      virtual.tls-email: your@mail.com
+      virtual.port: "3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=password
     depends_on:
