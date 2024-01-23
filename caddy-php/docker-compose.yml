@@ -1,16 +1,14 @@
 version: "3"
 services:
   phpweb: 
-    image: "abiosoft/caddy:php"
+    image: "webhippie/php-caddy:latest"
     container_name: phpweb
     ports:
-      - "80:80"
-      - "443:443"
-      - "2105:2015"
+      - "8080:8080"
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
-      - "virtual.port=8000" # exposed port of this container
+      - "virtual.port=8080" # exposed port of this container
     environment:
       VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "8080"
