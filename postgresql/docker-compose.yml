@@ -8,10 +8,11 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: dbpass_your_database_password
-      TZ: GMT+7
-      PGTZ: GMT+7
+      TZ: Asia/Bangkok
+      PGTZ: Asia/Bangkok
     volumes:
-      - ./sqldata:/var/lib/postgresql/data
+      - sqldata:/var/lib/postgresql/data
+      - ./timezone:/etc/timezone
 
   pgadmin:
     container_name: pgadmin
@@ -36,3 +37,4 @@ networks:
 
 volumes:
     pgadmin:
+    sqldata:
