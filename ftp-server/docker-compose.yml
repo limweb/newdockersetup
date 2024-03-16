@@ -1,0 +1,24 @@
+services:
+  ftp-server:
+    image: garethflowers/ftp-server
+    container_name: my-ftp-server
+    ports:
+      - '20-21:20-21/tcp'
+      - '40000-40009:40000-40009/tcp'
+    labels:
+      - "virtual.host=ftp.yourdomain.com" # your domain
+      - "virtual.port=21" # exposed port of this container
+      - "virtual.tls-email=your@email.com" # ssl is now on
+    environment:
+      - FTP_PASS=Your@Pa$$w0rd
+      - FTP_USER=ftpuser
+    volumes:
+      - 'ftpserver-data:/home/user'
+
+volumes:
+  ftpserver-data:
+
+networks:
+  default:
+    external:
+      name: proxy-network
