@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+  keydb:
+    image: eqalpha/keydb:x86_64_v5.3.3
+    container_name: keydb
+    # command: keydb-server /etc/keydb/redis.conf --server-threads 2 --active-replica yes --replicaof 192.168.1.1 6379
+    # command: keydb-server /etc/keydb/redis.conf --server-threads 2 --active-replica yes --replicaof 192.168.1.2 6379
+    command: keydb-server /etc/keydb/redis.conf --server-threads 2
+    volumes:
+      - ./redis.conf:/etc/keydb/redis.conf
+      - data:/data
+    ports:
+      - 6379:6379
+    restart: always
+    labels:
+      - "virtual.host=keydb.youdomain.com"
+      - "virtual.tls-email=your@email.com" # ssl is now on
+      - "virtual.port=6379" # exposed port of this container
+volumes:
+  data:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: proxy-network
