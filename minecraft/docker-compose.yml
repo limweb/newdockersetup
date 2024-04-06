@@ -2,13 +2,18 @@
 version: "3.8"
 services:
   minecraft:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:java19
     tty: true
     stdin_open: true
     ports:
       - "25565:25565"
     environment:
       EULA: "TRUE"
+      UID: 1000
+      GID: 1000
+      TZ: Asia/Bangkok
+      GUI: FALSE
+      CUSTOM_SERVER: server.jar
     volumes:
       - minecraft-data:/data
     labels:
