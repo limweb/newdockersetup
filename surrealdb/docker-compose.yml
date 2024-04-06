@@ -1,0 +1,70 @@
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: surrealdb
+    working_dir: /db/
+    ports:
+      - "8000:8000"
+    command:
+      - start #start the SurrealDB server
+      - --log=trace #no idea what this does :(
+      - --user=root #default user
+      - --pass=root #default password
+      - file:/db/surreal.db
+    restart: always
+    volumes:
+      - surreal-data:/db/
+    labels:
+      com.docker.compose.project: "surrealdb"
+      virtual.host: "servicname.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8000"
+
+  prometheus:
+    container_name: surrealdb-prometheus
+    image: prom/prometheus:v2.2.1
+    user: root
+    command:
+      - --log.level=error
+      - --storage.tsdb.path=/data/prometheus
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./config/pd.rules.yml:/etc/prometheus/pd.rules.yml:ro
+      - ./config/tikv.rules.yml:/etc/prometheus/tikv.rules.yml:ro
+      - ./config/tidb.rules.yml:/etc/prometheus/tidb.rules.yml:ro
+      - db-data:/data
+    restart: on-failure
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:6.0.1
+    container_name: surrealdb-grafana
+    user: "0"
+    environment:
+      GF_LOG_LEVEL: error
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+      GF_PATHS_CONFIG: /etc/grafana/grafana.ini
+    volumes:
+      - ./config/grafana:/etc/grafana
+      - ./config/dashboards:/tmp/dashboards
+      - ./data/grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    profiles:
+      - monitoring
+
+volumes:
+  surreal-data:
+  
+networks:
+    default:
+        external:
+            name: proxy-network
+
+
+
