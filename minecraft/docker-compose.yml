@@ -12,7 +12,7 @@ services:
       UID: 1000
       GID: 1000
       TZ: "Asia/Bangkok"
-      GUI: false
+      GUI: "FALSE"
       CUSTOM_SERVER: server.jar
     volumes:
       - minecraft-data:/data
