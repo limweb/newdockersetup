@@ -11,8 +11,8 @@ services:
       EULA: "TRUE"
       UID: 1000
       GID: 1000
-      TZ: Asia/Bangkok
-      GUI: FALSE
+      TZ: "Asia/Bangkok"
+      GUI: false
       CUSTOM_SERVER: server.jar
     volumes:
       - minecraft-data:/data
