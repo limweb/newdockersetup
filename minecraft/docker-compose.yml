@@ -1,0 +1,27 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.8"
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    tty: true
+    user: root
+    stdin_open: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+    volumes:
+      - minecraft-data:/data
+    labels:
+      com.docker.compose.project: "servicname"
+      virtual.host: "servicname.local.com"
+      virtual.tls-email: limweb@hotmail.com
+      virtual.port: "25565"
+
+volumes:
+  minecraft-data:
+
+networks:
+  default:
+    external:
+      name: proxy-network

@@ -3,6 +3,7 @@ services:
     image: surrealdb/surrealdb:latest
     container_name: surrealdb
     working_dir: /db/
+    user: root
     ports:
       - "8000:8000"
     command:
