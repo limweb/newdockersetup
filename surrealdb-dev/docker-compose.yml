@@ -1,0 +1,28 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: '3'
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: surrealdb
+    ports:
+      - "8000"
+    user: root
+    env_file:
+      - .env
+    command:  start
+    restart: always
+    volumes:
+      - surreal-data:/db/:rw
+    labels:
+      com.docker.compose.project: "surrealdb"
+      virtual.host: "yourdomain.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8000"
+
+volumes:
+  surreal-data:
+
+networks:
+    default:
+        external:
+            name: proxy-network
