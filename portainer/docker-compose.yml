@@ -2,7 +2,7 @@ version: "2.1"
 
 services:
   portainer:
-    image: portainer/portainer
+    image: portainer/portainer-ce:latest
     container_name: portainer
     privileged: true
     ports:
