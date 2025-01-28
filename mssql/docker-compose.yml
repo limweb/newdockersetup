@@ -14,15 +14,15 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "mssql2017@pass"
     volumes:
-      - data-mssqlvolume:/var/opt/mssql 
+      - data-mssqlvolume:/var/opt/mssql
 
-  phpweb: 
+  phpweb:
     image: "limweb/caddyphpsqlsrv:latest"
     container_name: phpweb
     ports:
       - "80:2015"
     expose:
-      - "80"      
+      - "80"
     volumes:
       - ./php:/srv
       - caddycerts-data:/etc/caddycerts
@@ -33,5 +33,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

@@ -1,5 +1,5 @@
-# together enable HTTP basic authentication. (Password should be a string base64 encoded from bcrypt hash. 
-# You can use https://bcrypt-generator.com/ with default config and 
+# together enable HTTP basic authentication. (Password should be a string base64 encoded from bcrypt hash.
+# You can use https://bcrypt-generator.com/ with default config and
 # https://www.base64encode.org/.)
 #  docker-compose -f docker-compose.yml config check validate config
 version: "2.1"
@@ -14,9 +14,8 @@ services:
       - "virtual.tls-email=your@email.com"
       - "virtual.port=8888"
       - "virtual.auth.username=sshwebadmin"
-      - "virtual.auth.password=JDJhJDEyJDNoMUpsN080WlU1UzdpWi5KQXFDWnVGckQ2Z1ZwRVJieGZFaU04MTFMZFhYZk1NMmhGM1VP"  #example password = password
+      - "virtual.auth.password=JDJhJDEyJDNoMUpsN080WlU1UzdpWi5KQXFDWnVGckQ2Z1ZwRVJieGZFaU04MTFMZFhYZk1NMmhGM1VP" #example password = password
 networks:
   default:
-    external:
-      name: proxy-network
-      
+    external: true
+    name: proxy-network

@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   keydb:
     image: eqalpha/keydb:x86_64_v5.3.3
     container_name: keydb
@@ -23,5 +22,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

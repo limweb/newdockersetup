@@ -1,5 +1,5 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: '3'
+version: "3"
 services:
   surrealdb:
     image: surrealdb/surrealdb:latest
@@ -9,7 +9,7 @@ services:
     user: root
     env_file:
       - .env
-    command:  start
+    command: start
     restart: always
     volumes:
       - surreal-data:/db/:rw
@@ -23,6 +23,6 @@ volumes:
   surreal-data:
 
 networks:
-    default:
-        external:
-            name: proxy-network
+  default:
+    external: true
+      name: proxy-network

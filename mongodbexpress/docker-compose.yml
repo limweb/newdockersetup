@@ -34,11 +34,11 @@ services:
       VIRTUAL_HOST: "mongoexpress.yourdomain.com"
       VIRTUAL_PORT: "8081"
       LETSENCRYPT_HOST: "mongoexpress.yourdomain.comm"
-      LETSENCRYPT_EMAIL: "your@email.com"     
+      LETSENCRYPT_EMAIL: "your@email.com"
       ME_CONFIG_MONGODB_ADMINUSERNAME: "dbuser"
       ME_CONFIG_MONGODB_ADMINPASSWORD: "dbpass"
 
 networks:
-   default:
-     external:
-       name: proxy-network
+  default:
+    external: true
+    name: proxy-network

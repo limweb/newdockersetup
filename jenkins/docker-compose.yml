@@ -1,7 +1,6 @@
 version: "2.1"
 
 services:
-
   jenkins:
     image: limweb/jenkins-dind:latest
     user: root
@@ -17,7 +16,7 @@ services:
       VIRTUAL_HOST: "your_jenkins.com"
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "your_jenkins.com"
-      LETSENCRYPT_EMAIL: "your@email.com"      
+      LETSENCRYPT_EMAIL: "your@email.com"
     volumes:
       - "jenkins-data:/var/jenkins_home"
       - /var/run/docker.sock:/var/run/docker.sock
@@ -27,5 +26,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

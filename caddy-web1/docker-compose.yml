@@ -4,14 +4,14 @@ services:
     image: "webhippie/php-caddy:latest"
     container_name: your_website.com
     # ports:
-      # - "8080:8080"
+    # - "8080:8080"
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=8080" # exposed port of this container
     volumes:
-      - ./dist:/srv      
+      - ./dist:/srv
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

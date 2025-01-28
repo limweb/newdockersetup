@@ -1,48 +1,47 @@
-version: '3'
+version: "3"
 
 volumes:
   mysql_data:
-      driver: local
+    driver: local
 
 services:
   mysql:
-      image: mysql:5.7
-      volumes:
-        - mysql_data:/var/lib/mysql
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: keycloak
-        MYSQL_USER: keycloak
-        MYSQL_PASSWORD: password
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
 
   keycloak:
-      image: quay.io/keycloak/keycloak:latest
-      labels:
-        - "virtual.host=your_keycloak.com" # your domain
-        - "virtual.port=8080" # exposed port of this container
-        - "virtual.tls-email=your@email.com" # ssl is now on        
-      environment:
-        VIRTUAL_HOST: "your_keycloak.com"
-        VIRTUAL_PORT: "8080"
-        LETSENCRYPT_HOST: "your_keycloak.com"
-        LETSENCRYPT_EMAIL: "your@email.com"
-        DB_VENDOR: MYSQL
-        DB_ADDR: mysql
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: Pa55w0rd
-        PROXY_ADDRESS_FORWARDING: "true"
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "connectTimeout=30000"
-      ports:
-        - 8080:8080
-      depends_on:
-        - mysql
-
+    image: quay.io/keycloak/keycloak:latest
+    labels:
+      - "virtual.host=your_keycloak.com" # your domain
+      - "virtual.port=8080" # exposed port of this container
+      - "virtual.tls-email=your@email.com" # ssl is now on
+    environment:
+      VIRTUAL_HOST: "your_keycloak.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "your_keycloak.com"
+      LETSENCRYPT_EMAIL: "your@email.com"
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+      PROXY_ADDRESS_FORWARDING: "true"
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "connectTimeout=30000"
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
 
 networks:
   default:
-    external:
-      name: proxy-network      
+    external: true
+    name: proxy-network

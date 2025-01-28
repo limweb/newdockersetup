@@ -1,0 +1,7 @@
+copy wordpress into this floder
+
+wp-admin
+wp-content
+wp-include
+.htaccess
+wp-*

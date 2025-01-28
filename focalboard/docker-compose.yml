@@ -1,0 +1,26 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.1"
+services:
+  focalboard:
+    image: "mattermost/focalboard"
+    container_name: focalboard
+    restart: "always"
+    ports:
+      - "8101:8000"
+    expose:
+      - "8101"
+    labels:
+      com.docker.compose.project: "focalboard"
+      virtual.host: "focalboard.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8000"
+    environment:
+      VIRTUAL_HOST: "focalboard.local.com"
+      VIRTUAL_PORT: "8000"
+      LETSENCRYPT_HOST: "focalboard.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+
+networks:
+  default:
+    external: true
+    name: proxy-network

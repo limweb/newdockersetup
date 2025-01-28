@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   docker-lemp:
@@ -11,12 +11,12 @@ services:
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
-      - "virtual.port=80" # exposed port of this container           
+      - "virtual.port=80" # exposed port of this container
     environment:
       VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "80"
       LETSENCRYPT_HOST: "your_website.com"
-      LETSENCRYPT_EMAIL: "your@email.com"      
+      LETSENCRYPT_EMAIL: "your@email.com"
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: dbname
       MYSQL_USER: dbusr
@@ -27,5 +27,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: proxy-network  
+    external: true
+    name: proxy-network

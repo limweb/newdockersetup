@@ -10,7 +10,7 @@ services:
       com.docker.compose.project: "yourservicname"
       virtual.host: "cron.yourdomain.com"
       virtual.tls-email: your@email.com
-      virtual.port: "3012"      
+      virtual.port: "3012"
     volumes:
       - cronjob-localtime:/etc/localtime:ro
       - cronjob-timezone:/etc/timezone:ro
@@ -27,14 +27,18 @@ services:
       LETSENCRYPT_EMAIL: your@email.com
 
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1",
+        ]
       interval: 5s
       timeout: 1s
       retries: 3
     logging:
-        driver: "json-file"
-        options:
-            max-size: "10m"
+      driver: "json-file"
+      options:
+        max-size: "10m"
 
 volumes:
   cronjob-localtime:
@@ -42,8 +46,8 @@ volumes:
   cronjob-data:
   cronjob-logs:
   cronjob-plugins:
-  
+
 networks:
-    default:
-        external:
-            name: proxy-network            
+  default:
+    external: true
+      name: proxy-network

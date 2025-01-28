@@ -55,6 +55,5 @@ services:
       TZ: Asia/Bangkok
 networks:
   default:
-    external:
-      name: proxy-network
-
+    external: true
+    name: proxy-network

@@ -13,9 +13,9 @@ services:
       VIRTUAL_HOST: your_whoami.com
       VIRTUAL_PORT: 8000
       LETSENCRYPT_HOST: "your_whoami.com"
-      LETSENCRYPT_EMAIL: "your@email.com"      
+      LETSENCRYPT_EMAIL: "your@email.com"
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

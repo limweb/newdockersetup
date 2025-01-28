@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   uptime-kuma:
@@ -7,7 +7,7 @@ services:
     volumes:
       - uptime-kuma:/app/data
     ports:
-      - "3001:3001"  # <Host Port>:<Container Port>
+      - "3001:3001" # <Host Port>:<Container Port>
     labels:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
@@ -19,5 +19,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

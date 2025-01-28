@@ -1,4 +1,4 @@
-version: '2.1'
+version: "2.1"
 services:
   verdaccio:
     container_name: verdaccio
@@ -11,13 +11,13 @@ services:
       VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "4873"
       LETSENCRYPT_HOST: "your_website.com"
-      LETSENCRYPT_EMAIL: "your@email.com"   
+      LETSENCRYPT_EMAIL: "your@email.com"
     ports:
       - 4873:4873
     volumes:
       - ./verdaccio:/verdaccio/storage
-      
+
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network

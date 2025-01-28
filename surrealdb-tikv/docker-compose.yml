@@ -1,7 +1,6 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   pd0:
     container_name: surrealdb-pd0
     image: pingcap/pd:v6.1.0
@@ -157,7 +156,7 @@ services:
     ports:
       - "8000"
       # - "8000:8000"
-    command: 
+    command:
       - start
       - --log=trace
       - --user=root
@@ -171,8 +170,7 @@ services:
 
 volumes:
   db-data:
-   
 # networks:
 #   default:
-#     external:
-#       name: proxy-network
+#     external: true
+#     name: proxy-network

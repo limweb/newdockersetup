@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.1"
 
 services:
   dbpostgresql:
@@ -20,21 +20,20 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: your@email.com
       PGADMIN_DEFAULT_PASSWORD: yourpassword
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_SERVER_MODE: "False"
     labels:
       - "virtual.host=pgadmin3.youdomain.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=80" # exposed port of this container
     volumes:
-       - pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     restart: always
-
 
 networks:
   default:
-    external:
-      name: proxy-network
+    external: true
+    name: proxy-network
 
 volumes:
-    pgadmin:
-    sqldata:
+  pgadmin:
+  sqldata:
