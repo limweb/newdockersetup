@@ -1,0 +1,24 @@
+version: "3.5"
+services:
+  openssh-server:
+    image: devdotnetorg/openssh-server:ubuntu
+    container_name: openssh-server
+    working_dir: /works
+    environment:
+      - USER_PASSWORD=your-toor-password
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # สำหรับ ต้องการใช้กับ docker ต้องลง docker client เ้พิ่ม
+      - ./openssh-server-data:/data # ไว้เก็บ ข้อมูล ssh data
+      - ./your-works-folder:/works # ไว้ mount ไปที่ทำงานของ dir เพื่อจะสามารถ remote ทำงานได้
+    ports:
+      - "22:22"
+    restart: always
+
+volumes:
+  openssh-server-data:
+    name: openssh-server-data
+
+networks:
+  default:
+    external: true
+    name: proxy-network

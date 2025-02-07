@@ -1,0 +1,23 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.7"
+services:
+  apache:
+    image: "php:8.4-apache"
+    container_name: apache
+    working_dir: /var/www/html
+    restart: "always"
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    volumes:
+      - ./web:/var/www/html
+    labels:
+      com.docker.compose.project: "apache"
+      virtual.host: "your.domain.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "80"
+networks:
+  default:
+    external:
+      name: proxy-network
