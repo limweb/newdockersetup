@@ -1,0 +1,32 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.7"
+services:
+  php8sqlsrv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "limweb/caddy-php81-mssql"
+    container_name: php8sqlsrv
+    working_dir: /var/www/html
+    restart: "always"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - ./php:/var/www/html
+    labels:
+      com.docker.compose.project: "php8sqlsrv"
+      virtual.host: "php8sqlsrv.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      VIRTUAL_HOST: "php8sqlsrv.local.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "php8sqlsrv.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+
+networks:
+  default:
+    external: true
+    name: proxy-network
