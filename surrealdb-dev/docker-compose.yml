@@ -30,4 +30,4 @@ volumes:
 networks:
   default:
     external: true
-      name: proxy-network
+    name: proxy-network
