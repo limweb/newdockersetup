@@ -21,6 +21,11 @@ services:
     volumes:
       - ./:/srv
       - ./docker/Caddyfile:/etc/Caddyfile
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 networks:
   default:

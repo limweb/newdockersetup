@@ -25,6 +25,11 @@ services:
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "php8sqlsrv.local.com"
       LETSENCRYPT_EMAIL: your@email.com
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
 networks:
   default:

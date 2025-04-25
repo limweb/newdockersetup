@@ -22,6 +22,11 @@ services:
       - ./gitlab/config:/etc/gitlab
       - ./gitlab/data:/var/opt/gitlab
       - ./gitlab/logs:/var/log/gitlab
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
     networks:
       - proxy-network
 
@@ -33,6 +38,11 @@ services:
     volumes:
       - ./config/gitlab-runner:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
     networks:
       - proxy-network
 

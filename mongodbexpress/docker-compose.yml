@@ -16,6 +16,11 @@ services:
     environment:
       - "MONGO_INITDB_ROOT_USERNAME=dbuser"
       - "MONGO_INITDB_ROOT_PASSWORD=dbpass"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   mongo-express:
     image: "mongo-express"
@@ -37,6 +42,11 @@ services:
       LETSENCRYPT_EMAIL: "your@email.com"
       ME_CONFIG_MONGODB_ADMINUSERNAME: "dbuser"
       ME_CONFIG_MONGODB_ADMINPASSWORD: "dbpass"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
 networks:
   default:

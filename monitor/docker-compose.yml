@@ -16,6 +16,11 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
       - cadvisor
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
@@ -32,6 +37,11 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   pushgateway:
     image: prom/pushgateway
@@ -43,6 +53,11 @@ services:
       virtual.host: "pushgateway.local.com"
       virtual.tls-email: your@mail.com
       virtual.port: "9091"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -54,6 +69,11 @@ services:
       virtual.host: "node-exporter.local.com"
       virtual.tls-email: your@mail.com
       virtual.port: "9100"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   grafana:
     image: grafana/grafana
@@ -71,6 +91,11 @@ services:
     depends_on:
       - prometheus
       - cadvisor
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
 networks:
   default:

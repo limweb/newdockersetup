@@ -21,6 +21,11 @@ services:
       MYSQL_DATABASE: dbname
       MYSQL_USER: dbusr
       MYSQL_PASSWORD: dbpass
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 volumes:
   db_data: {}

@@ -26,6 +26,11 @@ services:
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: dbpass
     network_mode: "bridge"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 networks:
   default:

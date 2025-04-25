@@ -13,6 +13,11 @@ services:
       - MINIO_ROOT_PASSWORD=password
       - MINIO_BROWSER_REDIRECT_URL=http://yourip:9001
       - MINIO_SERVER_URL=http://yourip:9002
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
 networks:
   default:

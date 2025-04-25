@@ -25,6 +25,11 @@ services:
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "phpcaddy2.local.com"
       LETSENCRYPT_EMAIL: your@email.com
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 networks:
   default:

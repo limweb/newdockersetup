@@ -13,6 +13,11 @@ services:
       - "80:80"
       - "443:443"
       - "2015"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 volumes:
   caddy-data:
   caddy-info:

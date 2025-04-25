@@ -16,6 +16,11 @@ services:
       - "virtual.host=keydb.youdomain.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=6379" # exposed port of this container
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 volumes:
   data:
     driver: local

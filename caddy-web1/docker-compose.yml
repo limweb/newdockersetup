@@ -11,6 +11,11 @@ services:
       - "virtual.port=8080" # exposed port of this container
     volumes:
       - ./dist:/srv
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 networks:
   default:
     external: true

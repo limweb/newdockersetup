@@ -13,6 +13,11 @@ services:
     volumes:
       - sqldata:/var/lib/postgresql/data
       - ./timezone:/etc/timezone
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   pgadmin:
     container_name: pgadmin
@@ -28,6 +33,11 @@ services:
     volumes:
       - pgadmin:/var/lib/pgadmin
     restart: always
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
 
 networks:
   default:

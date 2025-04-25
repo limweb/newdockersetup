@@ -13,6 +13,11 @@ services:
       - "8080:8080"
     expose:
       - "8080"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
     labels:
       com.docker.compose.project: "phpfirebird"
       virtual.host: "yourdomain.om"
@@ -38,6 +43,11 @@ services:
       - "3050:3050"
     expose:
       - "3050"
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
     volumes:
       - ../dbs:/firebird/data/
     environment:
@@ -53,6 +63,11 @@ services:
     environment:
       ISC_PASSWORD: masterkey
       TZ: Asia/Bangkok
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 networks:
   default:
     external: true
