@@ -2,6 +2,11 @@ services:
   n8n:
     image: n8nio/n8n:latest
     restart: always
+    labels:
+      - "virtual.host=n8n.yourdomain.com" # your domain
+      - "virtual.port=5678" # exposed port of this container
+      - "virtual.tls-email=your@email.com" # ssl is now on
+
     environment:
       - N8N_EXPERIMENTAL_FEATURES=ai
       - DB_TYPE=postgresdb
