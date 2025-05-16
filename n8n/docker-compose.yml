@@ -1,0 +1,91 @@
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    restart: always
+    environment:
+      - N8N_EXPERIMENTAL_FEATURES=ai
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=${DB_POSTGRESDB_HOST}
+      - DB_POSTGRESDB_PORT=${DB_POSTGRESDB_PORT}
+      - DB_POSTGRESDB_DATABASE=${DB_POSTGRESDB_DATABASE}
+      - DB_POSTGRESDB_USER=${DB_POSTGRESDB_USER}
+      - DB_POSTGRESDB_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - QUEUE_BULL_REDIS_HOST=${QUEUE_BULL_REDIS_HOST}
+      - QUEUE_BULL_REDIS_PORT=${QUEUE_BULL_REDIS_PORT}
+      - N8N_PROTOCOL=${N8N_PROTOCOL}
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=${N8N_PORT}
+      - N8N_PATH=${N8N_PATH}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - N8N_API_KEY=${N8N_API_KEY}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n-data:/home/node/.n8n
+      - n8n-logs:/home/node/.n8n/logs
+    ports:
+      - "5678:5678"
+    depends_on:
+      - db_n8n
+      - redis
+ 
+  db_n8n:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_POSTGRESDB_USER}
+      - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - POSTGRES_DB=${DB_POSTGRESDB_DATABASE}
+      - POSTGRES_NON_ROOT_USER=${DB_POSTGRESDB_USER}
+      - POSTGRES_NON_ROOT_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+    # ports:
+      # - "15430:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db_memory:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=memory
+      - POSTGRES_DB=db_memory
+      - POSTGRES_NON_ROOT_USER=postgres
+      - POSTGRES_NON_ROOT_PASSWORD=memory
+    ports:
+      - "15431:5432"
+    volumes:
+      - postgres-memory-data:/var/lib/postgresql/data
+      - postgres-memory-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6
+    restart: always
+    volumes:
+      - redis-data:/data
+    # ports:
+    #   - 56379:6379
+
+volumes:
+  redis-data:
+  postgres-data:
+  postgres-init:
+  postgres-memory-data:
+  postgres-memory-init:
+  n8n-data:
+  n8n-logs:
+
+networks:
+  default:
+    external:
+      name: proxy-network

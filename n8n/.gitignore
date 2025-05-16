@@ -1,0 +1,6 @@
+.env
+/data
+node_modules
+services/executor/public
+__pycache__
+dist
