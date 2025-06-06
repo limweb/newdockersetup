@@ -72,3 +72,8 @@ networks:
     external: true
     name: proxy-network
     driver: bridge
+
+
+# สร้าง user
+# opt/keycloak/bin
+# bash-5.1$ ./kc.sh bootstrap-admin user
