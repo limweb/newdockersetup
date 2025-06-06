@@ -1,56 +1,74 @@
 version: "3"
 
 volumes:
-  mysql_data:
+  kcmysql_data:
     driver: local
 
 services:
-  mysql:
-    image: mysql:5.7
+  kcmysqldb:
+    image: mysql:8.0
     volumes:
-      - mysql_data:/var/lib/mysql
+      - kcmysql_data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: keycloak@password
+    ports:
+      # - 3306:3306
     logging:
-      driver: "json-file" # ใช้ json-file driver (default)
+      driver: "json-file"
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m"
+        max-file: "5"     
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     labels:
-      - "virtual.host=your_keycloak.com" # your domain
+      - "virtual.host=sso.yourdomain.com" # your domain
       - "virtual.port=8080" # exposed port of this container
       - "virtual.tls-email=your@email.com" # ssl is now on
     environment:
-      VIRTUAL_HOST: "your_keycloak.com"
+      # for Nginx reverse proxy
+      VIRTUAL_HOST: "sso.yourdomain.com"
       VIRTUAL_PORT: "8080"
-      LETSENCRYPT_HOST: "your_keycloak.com"
+      LETSENCRYPT_HOST: "sso.yourdomain.com"
       LETSENCRYPT_EMAIL: "your@email.com"
-      DB_VENDOR: MYSQL
-      DB_ADDR: mysql
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: Pa55w0rd
-      PROXY_ADDRESS_FORWARDING: "true"
-      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
-      #JDBC_PARAMS: "connectTimeout=30000"
+      # for Keycloak setup
+      KC_HOSTNAME: sso.yourdomain.com
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_HOSTNAME_URL: https://sso.yourdomain.com
+      KC_PROXY_HEADERS: xforwarded                                         
+      # for Keycloak admin setup      
+      KC_BOOTSTRAP_ADMIN: admin                                            
+      KC_BOOTSTRAP_ADMIN_PASSWORD: keycloak@password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: keycloak@password
+      # for Keycloak metrics and health checks
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_LOG_LEVEL: info
+      # keycloak database setup
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://kcmysqldb:3306/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak@password
+    command: start-dev
     ports:
-      - 8080:8080
+      # - 8080:8080
+      # - 9000:9000
     depends_on:
-      - mysql
+      - kcmysqldb
+    volumes:
+      - kcmysql_data:/var/lib/mysql
     logging:
-      driver: "json-file" # ใช้ json-file driver (default)
+      driver: "json-file"
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
+        max-size: "10m"
+        max-file: "5"     
 
 networks:
   default:
     external: true
     name: proxy-network
+    driver: bridge
