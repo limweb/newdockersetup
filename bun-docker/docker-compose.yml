@@ -1,0 +1,43 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.1"
+services:
+  yourbun-server:
+    build:
+      context: ./bunpj
+      dockerfile: ./docker/
+    image: limweb/yourbunserver:latest
+    command: bun run dev
+    working_dir: /app
+    # ports:
+    # - "3000:3000"
+    # expose:
+    # - "3000"
+    restart: always
+    labels:
+      com.docker.compose.project: "gw64"
+      virtual.host: "api.gateway64.com"
+      virtual.tls-email: limweb@hotmail.com
+      virtual.port: "3000"
+    environment:
+      VIRTUAL_HOST: "servicname.local.com"
+      VIRTUAL_PORT: "3000"
+      LETSENCRYPT_HOST: "servicname.local.com"
+      LETSENCRYPT_EMAIL: limweb@hotmail.com
+    volumes:
+      - ./public:/app/public
+      - ./src:/app/src
+    env_file:
+      - ./bunpj/.env.prod
+    logging:
+      # ใช้ json-file driver (default)
+      driver: "json-file"
+      options:
+        # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  default:
+    external: true
+    name: proxy-network
