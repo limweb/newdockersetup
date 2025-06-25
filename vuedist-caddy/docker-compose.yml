@@ -1,0 +1,31 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.1"
+services:
+  your_server_name:
+    image: "caddy:2.8.4-alpine"
+    labels:
+      com.docker.compose.project: "your_server_name"
+      # for caddy-gen-proxy
+      virtual.host: "servicname.local.com"
+      virtual.tls-email: your@email.com #ssl only
+      virtual.port: "8080" #chang ที่ Caddyfile
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./dist:/srv/www
+    environment:
+      # for niginx-reverse proxy only
+      VIRTUAL_HOST: "servicname.local.com"
+      VIRTUAL_PORT: "8080"
+      # ssl only
+      LETSENCRYPT_HOST: "servicname.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+
+networks:
+  default:
+    external: true
+    name: proxy-network
