@@ -22,7 +22,7 @@ services:
         max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
 
   phpweb:
-    image: "limweb/caddyphpsqlsrv:latest"
+    image: "yourdockeracc/caddyphpsqlsrv:latest"
     container_name: phpweb
     ports:
       - "80:2015"

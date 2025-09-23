@@ -5,7 +5,7 @@
 version: "2.1"
 services:
   webssh:
-    image: "limweb/webssh:latest"
+    image: "yourdockeracc/webssh:latest"
     ports:
       - "8888"
     restart: "always"

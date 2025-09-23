@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: "limweb/caddy2php74"
+    image: "yourdockeracc/caddy2php74"
     container_name: phpcaddy2
     working_dir: /var/www/html
     restart: "always"

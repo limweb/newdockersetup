@@ -14,14 +14,14 @@ services:
     # - "3000"
     restart: always
     labels:
-      com.docker.compose.project: "gw64"
-      virtual.host: "api.gateway64.com"
+      com.docker.compose.project: "your_project_name"
+      virtual.host: "your_website.com"
       virtual.tls-email: your@email.com
       virtual.port: "3000"
     environment:
-      VIRTUAL_HOST: "servicname.local.com"
+      VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "3000"
-      LETSENCRYPT_HOST: "servicname.local.com"
+      LETSENCRYPT_HOST: "your_website.com"
       LETSENCRYPT_EMAIL: your@email.com
     volumes:
       - ./public:/app/public

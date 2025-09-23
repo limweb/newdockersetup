@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: "limweb/caddy-php81-mssql"
+    image: "yourdockeracc/caddy-php81-mssql"
     container_name: php8sqlsrv
     working_dir: /var/www/html
     restart: "always"

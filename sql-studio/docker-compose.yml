@@ -1,29 +1,30 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.1"
+version: "3.8"
 services:
-  phpcaddy2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: "yourdockeracc/caddy2php74"
-    container_name: phpcaddy2
-    working_dir: /var/www/html
-    restart: "always"
+  sql-studio:
+    image: frectonz/sql-studio:latest
+    container_name: sql-studio
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "30303:3030"
     expose:
-      - "8080"
-    volumes:
-      - ./php:/var/www/html
+      - "3030"
+    command: >
+      /bin/sql-studio
+      --no-browser
+      --no-shutdown
+      --address=0.0.0.0:3030
+      mariadb
+      mariadb://localhost:3306/dbname
     labels:
-      com.docker.compose.project: "phpcaddy2"
-      virtual.host: "testphp.yourdomain.com"
+      com.docker.compose.project: "sql-studio"
+      virtual.host: "sql-studio.local.com"
       virtual.tls-email: your@email.com
-      virtual.port: "8080"
+      virtual.port: "3030"
     environment:
-      VIRTUAL_HOST: "testphp.yourdomain.com"
-      VIRTUAL_PORT: "8080"
-      LETSENCRYPT_HOST: "testphp.yourdomain.com"
+      VIRTUAL_HOST: "sql-studio.local.com"
+      VIRTUAL_PORT: "3030"
+      LETSENCRYPT_HOST: "sql-studio.local.com"
       LETSENCRYPT_EMAIL: your@email.com
     logging:
       driver: "json-file" # ใช้ json-file driver (default)

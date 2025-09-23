@@ -24,11 +24,11 @@ services:
       # - VIRTUAL_HOST = "servicname.local.com"
       # - VIRTUAL_PORT= "8101"
       # - LETSENCRYPT_HOST= "servicname.local.com"
-      # - LETSENCRYPT_EMAIL= limweb@hotmail.com
+      # - LETSENCRYPT_EMAIL= your@email.com
     labels:
       com.docker.compose.project: "dockge"
       # virtual.host: "servicname.local.com"
-      # virtual.tls-email: limweb@hotmail.com
+      # virtual.tls-email: your@email.com
       # virtual.port: "8101"
     logging:
       # ใช้ json-file driver (default)

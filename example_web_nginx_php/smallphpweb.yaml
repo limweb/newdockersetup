@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   nginxweb:
-    image: "limweb/docker-nginxfpm-fw74"
+    image: "yourdockeracc/docker-nginxfpm-fw74"
     container_name: nginxwebdev
     working_dir: /var/www/html
     restart: "no"

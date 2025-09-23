@@ -2,7 +2,7 @@ version: "2.1"
 
 services:
   jenkins:
-    image: limweb/jenkins-dind:latest
+    image: yourdockeracc/jenkins-dind:latest
     user: root
     privileged: true
     ports:

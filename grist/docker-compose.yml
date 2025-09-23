@@ -1,0 +1,39 @@
+# docker-compose -f docker-compose.yml config check validate config
+# https://support.getgrist.com/self-managed/#self-hosted-grist
+version: "3.8"
+services:
+  grist:
+    image: gristlabs/grist
+    container_name: grist
+    restart: unless-stopped
+    labels:
+      com.docker.compose.project: "grist"
+      virtual.host: "grist.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8484"
+    ports:
+      - "8484:8484"
+    expose:
+      - "8484"
+    volumes:
+      - grist:/persist
+    environment:
+      GRIST_SESSION_SECRET: invent-a-secret-here
+      GRIST_DEFAULT_EMAIL: your-email@example.com
+      VIRTUAL_HOST: "grist.local.com"
+      VIRTUAL_PORT: "8484"
+      LETSENCRYPT_HOST: "grist.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
+
+volumes:
+  grist:
+
+networks:
+  default:
+    external: true
+    name: proxy-network
