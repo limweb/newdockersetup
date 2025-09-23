@@ -13,6 +13,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./dist:/srv/www
     environment:
+      TZ: Asia/Bangkok
       # for niginx-reverse proxy only
       VIRTUAL_HOST: "servicname.local.com"
       VIRTUAL_PORT: "8080"

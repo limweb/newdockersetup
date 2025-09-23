@@ -8,6 +8,7 @@ services:
       - "virtual.tls-email=your@email.com" # ssl is now on
 
     environment:
+      - TZ=Asia/Bangkok
       - N8N_EXPERIMENTAL_FEATURES=ai
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=${DB_POSTGRESDB_HOST}
@@ -37,6 +38,7 @@ services:
     image: postgres:14
     restart: always
     environment:
+      
       - POSTGRES_USER=${DB_POSTGRESDB_USER}
       - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}
       - POSTGRES_DB=${DB_POSTGRESDB_DATABASE}
@@ -57,6 +59,7 @@ services:
     image: postgres:14
     restart: always
     environment:
+      - TZ=Asia/Bangkok
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=memory
       - POSTGRES_DB=db_memory

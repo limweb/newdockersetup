@@ -172,6 +172,7 @@ services:
     container_name: surrealdb-grafana
     user: "0"
     environment:
+      TZ: Asia/Bangkok
       GF_LOG_LEVEL: error
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
       GF_PATHS_CONFIG: /etc/grafana/grafana.ini
@@ -207,6 +208,8 @@ services:
       - tikv1
       - tikv2
     restart: always
+    environment:
+      TZ: Asia/Bangkok
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:

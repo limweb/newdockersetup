@@ -17,6 +17,8 @@ services:
       virtual.host: "your.domain.com"
       virtual.tls-email: your@email.com
       virtual.port: "80"
+    environment:
+      - TZ=Asia/Bangkok           
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:

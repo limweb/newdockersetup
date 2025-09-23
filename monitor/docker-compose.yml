@@ -10,6 +10,8 @@ services:
       virtual.host: "prometheus.local.com"
       virtual.tls-email: your@mail.com
       virtual.port: "9090"
+    environment:
+      TZ: Asia/Bangkok
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
@@ -49,6 +51,8 @@ services:
     restart: "always"
     ports:
       - 9091
+    environment:
+      TZ: Asia/Bangkok
     labels:
       virtual.host: "pushgateway.local.com"
       virtual.tls-email: your@mail.com
@@ -65,6 +69,8 @@ services:
     restart: "always"
     expose:
       - 9100
+    environment:
+      TZ: Asia/Bangkok
     labels:
       virtual.host: "node-exporter.local.com"
       virtual.tls-email: your@mail.com

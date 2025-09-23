@@ -23,6 +23,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     environment:
+      TZ: Asia/Bangkok
       PGADMIN_DEFAULT_EMAIL: your@email.com
       PGADMIN_DEFAULT_PASSWORD: yourpassword
       PGADMIN_CONFIG_SERVER_MODE: "False"

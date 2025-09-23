@@ -23,6 +23,7 @@ services:
       VIRTUAL_PORT: "3000"
       LETSENCRYPT_HOST: "servicname.local.com"
       LETSENCRYPT_EMAIL: your@email.com
+      TZ: Asia/Bangkok
     volumes:
       - ./public:/app/public
       - ./src:/app/src

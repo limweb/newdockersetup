@@ -16,6 +16,8 @@ services:
       - "virtual.host=keydb.youdomain.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=6379" # exposed port of this container
+    environment:
+      TZ: Asia/Bangkok
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:

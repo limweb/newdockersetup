@@ -8,6 +8,7 @@ services:
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=4873" # exposed port of this container
     environment:
+      TZ: Asia/Bangkok
       VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "4873"
       LETSENCRYPT_HOST: "your_website.com"

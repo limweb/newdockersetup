@@ -18,6 +18,7 @@ services:
     volumes:
       - grist:/persist
     environment:
+      TZ: Asia/Bangkok
       GRIST_SESSION_SECRET: invent-a-secret-here
       GRIST_DEFAULT_EMAIL: your-email@example.com
       VIRTUAL_HOST: "grist.local.com"

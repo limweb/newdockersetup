@@ -5,6 +5,7 @@ services:
     container_name: openssh-server
     working_dir: /works
     environment:
+      - TZ=Asia/Bangkok
       - USER_PASSWORD=your-toor-password
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # สำหรับ ต้องการใช้กับ docker ต้องลง docker client เ้พิ่ม

@@ -12,6 +12,7 @@ services:
     volumes:
       - ./mariadb_data:/var/lib/mysql
     environment:
+      TZ: Asia/Bangkok
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: dbpass

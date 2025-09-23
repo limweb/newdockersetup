@@ -14,6 +14,7 @@ services:
     labels:
       com.docker.compose.project: "mongodbforexpress"
     environment:
+      - TZ=Asia/Bangkok
       - "MONGO_INITDB_ROOT_USERNAME=dbuser"
       - "MONGO_INITDB_ROOT_PASSWORD=dbpass"
     logging:
@@ -36,6 +37,7 @@ services:
       - "virtual.tls-email=your@email.com"
       - "virtual.port=8081"
     environment:
+      TZ: Asia/Bangkok
       VIRTUAL_HOST: "mongoexpress.yourdomain.com"
       VIRTUAL_PORT: "8081"
       LETSENCRYPT_HOST: "mongoexpress.yourdomain.comm"

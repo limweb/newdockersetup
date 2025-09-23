@@ -11,6 +11,7 @@ services:
     labels:
       com.docker.compose.project: "mssql"
     environment:
+      TZ: Asia/Bangkok
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "mssql2017@pass"
     volumes:
@@ -28,6 +29,8 @@ services:
       - "80:2015"
     expose:
       - "80"
+    environment:
+      TZ: Asia/Bangkok
     volumes:
       - ./php:/srv
       - caddycerts-data:/etc/caddycerts

@@ -13,6 +13,8 @@ services:
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=2015" # exposed port of this container
     restart: always
+    environment:
+      TZ: Asia/Bangkok
 
 volumes:
   uptime-kuma:

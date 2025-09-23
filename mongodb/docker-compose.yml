@@ -15,6 +15,7 @@ services:
     labels:
       com.docker.compose.project: "mongodb"
     environment:
+      - TZ=Asia/Bangkok
       # - MONGO_INITDB_DATABASE=eventpassdb
       - MONGO_INITDB_ROOT_USERNAME=dbuser
       - MONGO_INITDB_ROOT_PASSWORD=dbpass

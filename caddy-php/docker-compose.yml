@@ -15,6 +15,7 @@ services:
       LETSENCRYPT_HOST: "your_website.com"
       LETSENCRYPT_EMAIL: "your@email.com"
       ACME_AGREE: true
+      TZ: Asia/Bangkok
     volumes:
       - ./php:/srv
       - caddycerts-data:/etc/caddycerts

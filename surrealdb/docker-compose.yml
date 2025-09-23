@@ -20,6 +20,8 @@ services:
       virtual.host: "servicname.local.com"
       virtual.tls-email: your@email.com
       virtual.port: "8000"
+    environment:
+      TZ: Asia/Bangkok
 
   prometheus:
     container_name: surrealdb-prometheus
@@ -31,6 +33,8 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    environment:
+      TZ: Asia/Bangkok
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./config/pd.rules.yml:/etc/prometheus/pd.rules.yml:ro
@@ -46,6 +50,7 @@ services:
     container_name: surrealdb-grafana
     user: "0"
     environment:
+      TZ: Asia/Bangkok
       GF_LOG_LEVEL: error
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
       GF_PATHS_CONFIG: /etc/grafana/grafana.ini

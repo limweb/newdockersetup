@@ -6,6 +6,7 @@ services:
     ports:
       - 8080:80
     environment:
+      TZ: Asia/Bangkok
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: exampleuser
       WORDPRESS_DB_PASSWORD: examplepass
@@ -21,6 +22,7 @@ services:
     image: mysql:8.0
     restart: always
     environment:
+      TZ: Asia/Bangkok
       MYSQL_DATABASE: exampledb
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass

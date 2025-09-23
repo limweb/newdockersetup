@@ -9,6 +9,7 @@ services:
       - 9002:9000
       - 9001:9001
     environment:
+      - TZ=Asia/Bangkok
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=password
       - MINIO_BROWSER_REDIRECT_URL=http://yourip:9001

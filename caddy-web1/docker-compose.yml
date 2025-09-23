@@ -9,6 +9,8 @@ services:
       - "virtual.host=your_website.com"
       - "virtual.tls-email=your@email.com" # ssl is now on
       - "virtual.port=8080" # exposed port of this container
+    environment:
+      - TZ=Asia/Bangkok
     volumes:
       - ./dist:/srv
     logging:

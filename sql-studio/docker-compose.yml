@@ -22,6 +22,7 @@ services:
       virtual.tls-email: your@email.com
       virtual.port: "3030"
     environment:
+      TZ: Asia/Bangkok
       VIRTUAL_HOST: "sql-studio.local.com"
       VIRTUAL_PORT: "3030"
       LETSENCRYPT_HOST: "sql-studio.local.com"

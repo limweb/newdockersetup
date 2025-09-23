@@ -13,6 +13,7 @@ services:
       - "virtual.port=8080" # exposed port of this container
       - "virtual.tls-email=your@email.com" # ssl is now on
     environment:
+      TZ: Asia/Bangkok
       VIRTUAL_HOST: "your_jenkins.com"
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "your_jenkins.com"

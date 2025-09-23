@@ -12,6 +12,7 @@ services:
     environment:
       - FTP_PASS=Your@Pa$$w0rd
       - FTP_USER=ftpuser
+      - TZ=Asia/Bangkok
     volumes:
       - "ftpserver-data:/home/user"
     logging:

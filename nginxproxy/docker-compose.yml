@@ -7,6 +7,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      TZ: Asia/Bangkok
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx/conf:/etc/nginx/conf.d

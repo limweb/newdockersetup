@@ -19,6 +19,7 @@ services:
       # - /opt/stacks:/opt/stacks
       - dockge-stacks:/opt/stacks
     environment:
+      - TZ=Asia/Bangkok
       # Tell Dockge where is your stacks directory
       - DOCKGE_STACKS_DIR=/opt/stacks
       # - VIRTUAL_HOST = "servicname.local.com"

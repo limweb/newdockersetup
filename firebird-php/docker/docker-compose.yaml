@@ -28,6 +28,7 @@ services:
       VIRTUAL_PORT: "8080"
       LETSENCRYPT_HOST: "yourdomain.com"
       LETSENCRYPT_EMAIL: your@mail.com
+      TZ: Asia/Bangkok
     volumes:
       - ../php:/var/www/html/
       - ../dbs:/firebird/data/

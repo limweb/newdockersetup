@@ -21,6 +21,7 @@ services:
       MYSQL_DATABASE: dbname
       MYSQL_USER: dbusr
       MYSQL_PASSWORD: dbpass
+      TZ: Asia/Bangkok
     logging:
       driver: "json-file"
       options:
