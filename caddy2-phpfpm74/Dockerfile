@@ -2,6 +2,8 @@ FROM caddy/caddy:v2.0.0-beta.17 as caddy
 FROM microsoft/mssql-tools as mssql
 FROM php:7.4.15-fpm-alpine3.13
 
+ENV TZ=Asia/Bangkok
+
 ENV RUN_DEPS \
     zlib \
     libzip \

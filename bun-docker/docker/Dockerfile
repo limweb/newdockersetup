@@ -1,5 +1,7 @@
 FROM oven/bun
 
+ENV TZ=Asia/Bangkok
+
 WORKDIR /app
 
 COPY package.json .
