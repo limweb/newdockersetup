@@ -1,0 +1,41 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.1"
+services:
+  fastify-server-dev:
+    image: node:22-alpine
+    command: npm run dev
+    working_dir: /app
+    ports:
+    - "3000:3000"
+    expose:
+    - "3000"
+    restart: always
+    labels:
+      com.docker.compose.project: "fastify"
+      virtual.host: "api.fastify.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "3000"
+    environment:
+      VIRTUAL_HOST: "api.fastify.local.com"
+      VIRTUAL_PORT: "3000"
+      LETSENCRYPT_HOST: "api.fastify.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+      TZ: Asia/Bangkok
+      CHOKIDAR_USEPOLLING: true   # 👈 สำคัญมาก!
+      CHOKIDAR_INTERVAL: 1000     # ตรวจทุก 1 วินาที (ปรับได้)      
+    volumes:
+      - ./fastify:/app
+
+    logging:
+      # ใช้ json-file driver (default)
+      driver: "json-file"
+      options:
+        # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  default:
+    external: true
+    name: proxy-network
