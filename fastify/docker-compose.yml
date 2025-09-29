@@ -1,34 +1,44 @@
 #  docker-compose -f docker-compose.yml config check validate config
 version: "3.1"
 services:
-  yourbun-server:
+  fastify-server:
     build:
-      context: ./bunpj
-      dockerfile: ./docker/
-    image: yourdockeracc/yourbunserver:latest
+      context: ./fastify
+      dockerfile: ../docker/Dockerfile
+    image: yourdockeracc/yourfastifyserver:latest
     command: bun run dev
     working_dir: /app
-    # ports:
-    # - "3000:3000"
-    # expose:
-    # - "3000"
+    ports:
+    - "3000:3000"
+    expose:
+    - "3000"
     restart: always
     labels:
-      com.docker.compose.project: "your_project_name"
-      virtual.host: "your_website.com"
+      com.docker.compose.project: "fastify"
+      virtual.host: "api.fastify.local.com"
       virtual.tls-email: your@email.com
       virtual.port: "3000"
     environment:
-      VIRTUAL_HOST: "your_website.com"
+      VIRTUAL_HOST: "api.fastify.local.com"
       VIRTUAL_PORT: "3000"
-      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_HOST: "api.fastify.local.com"
       LETSENCRYPT_EMAIL: your@email.com
       TZ: Asia/Bangkok
-    volumes:
-      - ./bunpj/public:/app/public
-      - ./bunpj/src:/app/src
-    env_file:
-      - ./bunpj/.env.prod
+    # volumes:
+    #   - ./public:/app/public
+    #   - ./src:/app/src
+    # env_file:
+    #   - ./fastify/.env.prod
+    healthcheck:
+      test: [
+          "CMD-SHELL",
+          "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1",
+      ]
+      interval: 5s
+      timeout: 1s
+      retries: 3
+      start_period: 5s
+
     logging:
       # ใช้ json-file driver (default)
       driver: "json-file"
