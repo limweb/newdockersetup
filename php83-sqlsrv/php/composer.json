@@ -1,0 +1,9 @@
+{
+    "require": {
+        "symfony/var-dumper": "^7.3",
+        "illuminate/database": "^12.32",
+        "illuminate/events": "^12.32",
+        "illuminate/container": "^12.32",
+        "illuminate/support": "^12.32"
+    }
+}

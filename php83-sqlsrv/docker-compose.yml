@@ -36,23 +36,31 @@ services:
       - TZ=Asia/Bangkok
     restart: unless-stopped
 
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      TZ: Asia/Bangkok
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
-      MSSQL_PID: Express
-    ports:
-      - "1433:1433"
+  # ถ้ามีการ update composer.json ให้ run composer-init
+  # docker-compose run --rm composer-init
+  composer-init:
+    image: composer:2
     volumes:
-      - mssql_data:/var/opt/mssql
-    restart: unless-stopped
+      - ./php:/var/www
+    working_dir: /var/www
+    command: >
+      sh -c "
+        composer install --no-dev --optimize-autoloader;
+        # if [ ! -d 'vendor' ] && [ -f 'composer.json' ]; then
+        #   echo 'Running composer install...';
+        #   composer install --no-dev --optimize-autoloader;
+        # else
+        #   echo 'Composer already installed or no composer.json found.';
+        # fi
+      "
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
 
 volumes:
   caddy_data:
   caddy_config:
-  mssql_data:
 
 networks:
   default:
