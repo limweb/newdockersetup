@@ -1,0 +1,15 @@
+{
+    "require": {
+        "phpseclib/phpseclib": "^3.0",
+        "jacwright/restserver": "^1.2",
+        "symfony/var-dumper": "^7.3",
+        "illuminate/database": "^12.32",
+        "illuminate/events": "^12.32",
+        "illuminate/container": "^12.32",
+        "illuminate/support": "^12.32",
+        "illuminate/http": "^12.32",
+        "vlucas/phpdotenv": "^5.6",
+        "bshaffer/oauth2-server-php": "^1.14"
+    }
+}
+        
