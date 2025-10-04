@@ -8,16 +8,17 @@ class LoginController  extends JwtController
 
 
     /**
-    *@noAuth
-    *@url GET /logout
-    *----------------------------------------------
-    *FILE NAME:  LoginController.php gen for Servit Framework Controller
-    *Created by: Tlen<limweb@hotmail.com>
-    *DATE:  2022-10-08(Sat)  16:16:49
+     *@noAuth
+     *@url GET /logout
+     *----------------------------------------------
+     *FILE NAME:  LoginController.php gen for Servit Framework Controller
+     *Created by: Tlen<limweb@hotmail.com>
+     *DATE:  2022-10-08(Sat)  16:16:49
 
-    *----------------------------------------------
-    */
-    public function logout(){
+     *----------------------------------------------
+     */
+    public function logout()
+    {
         echo '<script>
                 document.cookie = "user=";
                 document.cookie = "ref_token=";
@@ -29,16 +30,17 @@ class LoginController  extends JwtController
 
 
     /**
-    *@noAuth
-    *@url GET /login
-    *----------------------------------------------
-    *FILE NAME:  LoginController.php gen for Servit Framework Controller
-    *Created by: Tlen<limweb@hotmail.com>
-    *DATE:  2022-10-08(Sat)  15:49:46
+     *@noAuth
+     *@url GET /login
+     *----------------------------------------------
+     *FILE NAME:  LoginController.php gen for Servit Framework Controller
+     *Created by: Tlen<limweb@hotmail.com>
+     *DATE:  2022-10-08(Sat)  15:49:46
 
-    *----------------------------------------------
-    */
-    public function loginfrm(){
+     *----------------------------------------------
+     */
+    public function loginfrm()
+    {
         $html = '
         <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
@@ -87,7 +89,6 @@ class LoginController  extends JwtController
 </script>
 ';
         echo $html;
-
     }
 
 
@@ -118,7 +119,7 @@ class LoginController  extends JwtController
             } else {
                 // throw new Exception("กรุณา login ใหม่!", 1);
                 $this->server->setStatus(401);
-                throw new \Exception('401 Unauthorized',401);   
+                throw new \Exception('401 Unauthorized', 401);
             }
         } catch (Exception $e) {
             return [

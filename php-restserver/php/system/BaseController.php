@@ -13,6 +13,28 @@ use    Carbon\Carbon;
 class BaseController
 {
     /**
+     * BaseController constructor.
+     * This constructor will be called automatically when any child controller is instantiated.
+     */
+    /**
+     * Initialization method that can be overridden by child controllers
+     * This needs to be public to work with Jacwright RestServer
+     */
+    public function init()
+    {
+        $req = new \Request();
+        $comp = $req->gets->comp;
+        if ($comp) {
+            $this->company = $comp;
+        } else {
+            include SRVPATH . '/dist/404.html';
+            exit;
+        }
+
+        // $jwtuser = $req->user;
+        // $this->member = $jwtuser;
+    }
+    /**
      * @var \Jacwright\RestServer\RestServer
      */
     public $server;
@@ -21,6 +43,7 @@ class BaseController
      * @var array
      */
     public $map = [];
+
 
     /**
      * @var object|null
@@ -41,4 +64,7 @@ class BaseController
      * @var bool
      */
     public $useCors = true;
+
+
+    public $company = null;
 }

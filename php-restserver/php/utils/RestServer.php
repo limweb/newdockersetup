@@ -12,27 +12,29 @@ use ReflectionClass;
 
 class RestServer extends BaseRestServer
 {
-    /** @var array */
-    public $map = [];
-    
-    /** @var bool */
-    public $useCors = true;
-    
-    /** @var string */
-    private $charset = 'utf-8';
-    
-    /** @var \Illuminate\Database\Capsule\Manager */
-    public $capsule;
-    
-    /** @var \stdClass */
-    public $config;
-	
-    public function __construct() {
-        parent::__construct();
-		$this->charset = 'utf-8';
-    }
+	/** @var array */
+	public $map = [];
 
-	public function setCharset($charset) {
+	/** @var bool */
+	public $useCors = true;
+
+	/** @var string */
+	private $charset = 'utf-8';
+
+	/** @var \Illuminate\Database\Capsule\Manager */
+	public $capsule;
+
+	/** @var \stdClass */
+	public $config;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->charset = 'utf-8';
+	}
+
+	public function setCharset($charset)
+	{
 		$this->charset = $charset;
 	}
 
@@ -40,44 +42,47 @@ class RestServer extends BaseRestServer
 	//text/html
 	//application/json
 	//application/xml
-	public function setFormat($format) {
+	public function setFormat($format)
+	{
 		$this->format = $format;
 	}
 
-    /**
-     * @param prefix
-     * @param dbname
-     * @param host
-     * @param username
-     * @param password
-     */
+	/**
+	 * @param prefix
+	 * @param dbname
+	 * @param host
+	 * @param username
+	 * @param password
+	 */
 
-    public function setConnection($dbname = null,$prefix = '', $host = null, $username = null, $password = null, $charset = 'utf8', $collation = 'utf8_unicode_ci',$connection='default') {
-        // for new and reset config
-        $config = $this->config->dbconfig;
-        $config['database'] = ( $dbname ?: $config['database'] );
-        $config['prefix'] = ( $prefix ?:$config['prefix']);
-        $config['host'] = ($host ?: $config['host']);
-        $config['username'] = ($username ?: $config['username']);
-        $config['password'] = ($password ?: $config['password']);
-        $config['charset'] =$charset;
-        $config['collation'] =$collation;
-        $this->capsule = new Capsule;
-        $this->capsule->addConnection($config, $connection);
-        $this->capsule->setEventDispatcher(new Dispatcher(new Container));
-        $this->capsule->setAsGlobal();
-        $this->capsule->bootEloquent();
-        $this->config->dbconfig = $config;
-        // Capsule::setTablePrefix($prefix);
-        // echo Capsule::getTablePrefix();
-        // Capsule::setTablePrefix('sys_');
-        // echo Capsule::getTablePrefix();
-        // $this->server->setconnection() use in controller
-    }
-	public function sendData($data) {
+	public function setConnection($dbname = null, $prefix = '', $host = null, $username = null, $password = null, $charset = 'utf8', $collation = 'utf8_unicode_ci', $connection = 'default')
+	{
+		// for new and reset config
+		$config = $this->config->dbconfig;
+		$config['database'] = ($dbname ?: $config['database']);
+		$config['prefix'] = ($prefix ?: $config['prefix']);
+		$config['host'] = ($host ?: $config['host']);
+		$config['username'] = ($username ?: $config['username']);
+		$config['password'] = ($password ?: $config['password']);
+		$config['charset'] = $charset;
+		$config['collation'] = $collation;
+		$this->capsule = new Capsule;
+		$this->capsule->addConnection($config, $connection);
+		$this->capsule->setEventDispatcher(new Dispatcher(new Container));
+		$this->capsule->setAsGlobal();
+		$this->capsule->bootEloquent();
+		$this->config->dbconfig = $config;
+		// Capsule::setTablePrefix($prefix);
+		// echo Capsule::getTablePrefix();
+		// Capsule::setTablePrefix('sys_');
+		// echo Capsule::getTablePrefix();
+		// $this->server->setconnection() use in controller
+	}
+	public function sendData($data)
+	{
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Expires: 0");
-		header('Content-Type: ' . $this->format . '; charset='.$this->charset );
+		header('Content-Type: ' . $this->format . '; charset=' . $this->charset);
 		if ($this->useCors) {
 			$this->corsHeaders();
 		}
@@ -107,10 +112,11 @@ class RestServer extends BaseRestServer
 			if (defined('JSON_UNESCAPED_UNICODE')) {
 				$options = $options | JSON_UNESCAPED_UNICODE;
 			}
-			echo json_encode($data,JSON_UNESCAPED_UNICODE)?:(new ServicesJSON())->encode($data);
+			echo json_encode($data, JSON_UNESCAPED_UNICODE) ?: (new ServicesJSON())->encode($data);
 		}
 	}
-	private function corsHeaders() {
+	private function corsHeaders()
+	{
 		// to support multiple origins we have to treat origins as an array
 		$allowedOrigin = (array)$this->allowedOrigin;
 		// if no origin header is present then requested origin can be anything (i.e *)
@@ -118,7 +124,7 @@ class RestServer extends BaseRestServer
 		if (in_array($currentOrigin, $allowedOrigin)) {
 			$allowedOrigin = array($currentOrigin); // array ; if there is a match then only one is enough
 		}
-		foreach($allowedOrigin as $allowed_origin) { // to support multiple origins
+		foreach ($allowedOrigin as $allowed_origin) { // to support multiple origins
 			header("Access-Control-Allow-Origin: $allowed_origin");
 		}
 		header('Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS');
@@ -127,52 +133,54 @@ class RestServer extends BaseRestServer
 	}
 
 
-    /**
-     * $config =  array of config
-     * $connection  string of nameconnect ex  dba  dbb dbc
-     */
-    public function addConnection($config,$connection = 'default'){
-        if($this->capsule && $config){
-            if($connection == 'default') {
-                $this->capsule = new Capsule();
-            }
-            $this->capsule->addConnection($config, $connection);
-            $this->capsule->setEventDispatcher(new Dispatcher(new Container));
-            $this->capsule->setAsGlobal();
-            $this->capsule->bootEloquent();
-            $this->config->{$connection}  = $config;
-        }
-    }
+	/**
+	 * $config =  array of config
+	 * $connection  string of nameconnect ex  dba  dbb dbc
+	 */
+	public function addConnection($config, $connection = 'default')
+	{
+		if ($this->capsule && $config) {
+			if ($connection == 'default') {
+				$this->capsule = new Capsule();
+			}
+			$this->capsule->addConnection($config, $connection);
+			$this->capsule->setEventDispatcher(new Dispatcher(new Container));
+			$this->capsule->setAsGlobal();
+			$this->capsule->bootEloquent();
+			$this->config->{$connection}  = $config;
+		}
+	}
 
-    public function handleError($statusCode, $errorMessage = null) {
-        if($statusCode == 404 ){
-            include SRVPATH.'/dist/index.php';
-        } else {
-                $method = "handle$statusCode";
+	public function handleError($statusCode, $errorMessage = null)
+	{
+		if ($statusCode == 404) {
+			include SRVPATH . '/dist/index.php';
+		} else {
+			$method = "handle$statusCode";
 
-                foreach ($this->errorClasses as $class) {
-                    if (is_object($class)) {
-                        $reflection = new ReflectionObject($class);
-                    } else if (class_exists($class)) {
-                        $reflection = new ReflectionClass($class);
-                    }
+			foreach ($this->errorClasses as $class) {
+				if (is_object($class)) {
+					$reflection = new ReflectionObject($class);
+				} else if (class_exists($class)) {
+					$reflection = new ReflectionClass($class);
+				}
 
-                    if (isset($reflection)) {
-                        if ($reflection->hasMethod($method)) {
-                            $obj = is_string($class) ? new $class() : $class;
-                            $obj->$method();
-                            return;
-                        }
-                    }
-                }
+				if (isset($reflection)) {
+					if ($reflection->hasMethod($method)) {
+						$obj = is_string($class) ? new $class() : $class;
+						$obj->$method();
+						return;
+					}
+				}
+			}
 
-                if (!$errorMessage) {
-                    $errorMessage = $this->codes[$statusCode];
-                }
+			if (!$errorMessage) {
+				$errorMessage = $this->codes[$statusCode];
+			}
 
-                $this->setStatus($statusCode);
-                $this->sendData(array('error' => array('code' => $statusCode, 'message' => $errorMessage)));
-        }
+			$this->setStatus($statusCode);
+			$this->sendData(array('error' => array('code' => $statusCode, 'message' => $errorMessage)));
+		}
 	}
 
 	private $codes = array(
@@ -212,4 +220,41 @@ class RestServer extends BaseRestServer
 		'503' => 'Service Unavailable'
 	);
 
+	private function xml_encode($mixed, $domElement = null, $DOMDocument = null)
+	{  //@todo add type hint for $domElement and $DOMDocument
+		if (is_null($DOMDocument)) {
+			$DOMDocument = new DOMDocument;
+			$DOMDocument->formatOutput = true;
+			$this->xml_encode($mixed, $DOMDocument, $DOMDocument);
+			echo $DOMDocument->saveXML();
+		} else if (is_null($mixed) || $mixed === false || (is_array($mixed) && empty($mixed))) {
+			$domElement->appendChild($DOMDocument->createTextNode(null));
+		} else if (is_array($mixed)) {
+			foreach ($mixed as $index => $mixedElement) {
+				if (is_int($index)) {
+					if ($index === 0) {
+						$node = $domElement;
+					} else {
+						$node = $DOMDocument->createElement($domElement->tagName);
+						$domElement->parentNode->appendChild($node);
+					}
+				} else {
+					$index = str_replace(' ', '_', $index);
+					$plural = $DOMDocument->createElement($index);
+					$domElement->appendChild($plural);
+					$node = $plural;
+
+					if (!(rtrim($index, 's') === $index) && !empty($mixedElement)) {
+						$singular = $DOMDocument->createElement(rtrim($index, 's'));
+						$plural->appendChild($singular);
+						$node = $singular;
+					}
+				}
+
+				$this->xml_encode($mixedElement, $node, $DOMDocument);
+			}
+		} else {
+			$domElement->appendChild($DOMDocument->createTextNode($mixed));
+		}
+	}
 }
