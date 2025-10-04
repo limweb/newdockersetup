@@ -1,0 +1,60 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  php83-caddy:
+    image: caddy:latest
+    ports:
+      - "8080:8080"
+    working_dir: /var/www/html
+    labels:
+      com.docker.compose.project: "phpcaddy"
+      virtual.host: "phpcaddy.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      VIRTUAL_HOST: "phpcaddy.local.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "phpcaddy.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+      TZ: Asia/Bangkok
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./php:/var/www/
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - php
+    restart: unless-stopped
+
+  php:
+    build: .
+    working_dir: /var/www/html
+    volumes:
+      - ./php:/var/www
+    environment:
+      - TZ=Asia/Bangkok
+    restart: unless-stopped
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      TZ: Asia/Bangkok
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+  mssql_data:
+
+networks:
+  default:
+    external: true
+    name: proxy-network  

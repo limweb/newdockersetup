@@ -1,0 +1,12 @@
+:8080
+
+encode gzip
+php_fastcgi php:9000 {
+    dial_timeout  30s
+}
+try_files {path} /index.html?{query}&p={path}
+file_server
+
+log {
+    output stdout
+}
