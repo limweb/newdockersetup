@@ -29,8 +29,11 @@ class BaseController
             $this->company = $comp;
         } else {
             // dump('ไม่มี comp');
-            include SRVPATH . '/dist/no_comp.html';
-            exit;
+            $action = explode('/', $req->servers->REQUEST_URI)[0];
+            if (strpos($action, '/api') === true) {
+                include SRVPATH . '/dist/no_comp.html';
+                exit;
+            }
         }
 
         // $jwtuser = $req->user;

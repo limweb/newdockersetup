@@ -25,7 +25,8 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        echo "<center><h2>Rest Server Api v0.0.1<h2></center>";
+        // echo "<center><h2Rest Server Api v0.0.1<h2></center>";
+        include SRVPATH . '/dist/index.php';
     }
 
 

@@ -11,6 +11,8 @@
 ## eruda
    eruda.init();    
    eruda.add(eruda_vue);
+   <script src="/js/eruda.min.js" onload="eruda.init() "></script>
+<script src="/js/eruda-vue.js" onload="eruda.add(erudaVue)"></script>
 
 ## unocss
     [un-cloak] {
