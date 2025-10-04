@@ -24,10 +24,12 @@ class BaseController
     {
         $req = new \Request();
         $comp = $req->gets->comp;
+        // $action = explode('?', $req->servers->REQUEST_URI)[0];
         if ($comp) {
             $this->company = $comp;
         } else {
-            include SRVPATH . '/dist/404.html';
+            // dump('ไม่มี comp');
+            include SRVPATH . '/dist/no_comp.html';
             exit;
         }
 
