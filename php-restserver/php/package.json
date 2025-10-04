@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "unocss \"*.html\" --watch",
-    "build": "unocss \"*.html\" --out-file uno.css"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "unocss \"**/*.{html,vue,js,ts,jsx,tsx,php}\" --watch",
+        "build": "unocss \"**/*.{html,vue,js,ts,jsx,tsx,php}\" --out-file ./html/css/uno.css"
   },
   "keywords": [],
   "author": "",
