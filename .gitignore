@@ -2,3 +2,4 @@ vendor
 portainer/portainer/*
 caddy-genproxy/caddy/*
 wordpress/wp/*
+.windsurf/*
