@@ -1,0 +1,38 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis-queue
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Bangkok  # หรือเปลี่ยนเป็น UTC ก็ได้ เช่น TZ=UTC      
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    sysctls:
+      net.core.somaxconn: 1024
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์              
+
+volumes:
+  redis-data:
+
+networks:
+  default:
+    external: true
+    name: proxy-network  
+
+
+    
