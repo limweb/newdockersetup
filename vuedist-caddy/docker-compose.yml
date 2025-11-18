@@ -1,5 +1,5 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.1"
+version: "3.8"
 services:
   your_server_name:
     image: "caddy:2.8.4-alpine"

@@ -22,8 +22,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   pd1:
     container_name: surrealdb-pd1
@@ -46,8 +46,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   pd2:
     container_name: surrealdb-pd2
@@ -70,8 +70,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   tikv0:
     container_name: surrealdb-tikv0
@@ -93,8 +93,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   tikv1:
     container_name: surrealdb-tikv1
@@ -116,8 +116,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   tikv2:
     container_name: surrealdb-tikv2
@@ -139,8 +139,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   prometheus:
     container_name: surrealdb-prometheus
@@ -164,8 +164,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   grafana:
     image: grafana/grafana:6.0.1
@@ -188,8 +188,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
   surrealdb:
     image: surrealdb/surrealdb:latest
@@ -213,8 +213,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์    
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
 volumes:
   db-data:

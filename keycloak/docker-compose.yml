@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 volumes:
   kcmysql_data:
@@ -20,7 +20,7 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
-        max-file: "5"     
+        max-file: "5"
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     labels:
@@ -39,9 +39,9 @@ services:
       KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
       KC_HOSTNAME_URL: https://sso.yourdomain.com
-      KC_PROXY_HEADERS: xforwarded                                         
-      # for Keycloak admin setup      
-      KC_BOOTSTRAP_ADMIN: admin                                            
+      KC_PROXY_HEADERS: xforwarded
+      # for Keycloak admin setup
+      KC_BOOTSTRAP_ADMIN: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: keycloak@password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: keycloak@password
@@ -66,15 +66,13 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
-        max-file: "5"     
+        max-file: "5"
 
 networks:
   default:
     external: true
     name: proxy-network
     driver: bridge
-
-
 # สร้าง user
 # opt/keycloak/bin
 # bash-5.1$ ./kc.sh bootstrap-admin user

@@ -1,5 +1,5 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.1"
+version: "3.8"
 services:
   fastify-server:
     build:
@@ -9,9 +9,9 @@ services:
     command: bun run dev
     working_dir: /app
     ports:
-    - "3000:3000"
+      - "3000:3000"
     expose:
-    - "3000"
+      - "3000"
     restart: always
     labels:
       com.docker.compose.project: "fastify"
@@ -30,10 +30,11 @@ services:
     # env_file:
     #   - ./fastify/.env.prod
     healthcheck:
-      test: [
+      test:
+        [
           "CMD-SHELL",
           "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1",
-      ]
+        ]
       interval: 5s
       timeout: 1s
       retries: 3

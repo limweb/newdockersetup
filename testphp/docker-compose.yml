@@ -1,5 +1,5 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.1"
+version: "3.8"
 services:
   phpcaddy2:
     build:
@@ -29,8 +29,8 @@ services:
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
-        max-size: "10m"   # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
-        max-file: "5"     # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์      
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
 networks:
   default:

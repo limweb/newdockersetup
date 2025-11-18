@@ -1,0 +1,69 @@
+#  docker-compose -f docker-compose.yml config check validate config
+version: "3.8"
+services:
+  nocodb-mysql:
+    image: mariadb:10.5
+    container_name: nocodb-mysql
+    restart: unless-stopped
+    ports:
+      - "3316:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: your_strong_root_password # แก้ให้ปลอดภัยก่อนใช้จริง
+      MYSQL_DATABASE: nocodb # จะสร้าง DB ชื่อ nocodb ให้
+      MYSQL_USER: nocodb_user
+      MYSQL_PASSWORD: nocodb_pass # แก้ให้ปลอดภัยก่อนใช้จริง
+      TZ: Asia/Bangkok
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db_data:/var/lib/mysql
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+
+  nocodb:
+    image: nocodb/nocodb:latest
+    container_name: nocodb
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    labels:
+      com.docker.compose.project: "nocodb"
+      virtual.host: "nocodb.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8000"
+    environment:
+      VIRTUAL_HOST: "nocodb.local.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "nocodb.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+      TZ: Asia/Bangkok
+      # รูปแบบที่ถูกต้องสำหรับ MySQL / MariaDB
+      # mysql2://<host>:<port>?u=<user>&p=<pass>&d=<database>
+      NC_DB: "mysql2://db:3306?u=nocodb_user&p=nocodb_pass&d=nocodb"
+
+      # แนะนำให้ตั้งค่าเพิ่มสำหรับ production
+      NC_AUTH_JWT_SECRET: "change_me_to_a_long_random_string"
+      # NC_PUBLIC_URL: "http://localhost:8080"   # ปรับตาม domain/URL ที่ใช้จริง
+    volumes:
+      - nocodb_data:/usr/app/data
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+
+volumes:
+  db_data:
+  nocodb_data:
+
+networks:
+  default:
+    external: true
+    name: proxy-network
