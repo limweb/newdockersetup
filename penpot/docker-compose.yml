@@ -1,0 +1,202 @@
+version: "3.9"
+
+# ค่า flag มาตรฐานของ Penpot
+x-flags: &penpot-flags
+  # **คำเตือน** ถ้าเอาออกอินเทอร์เน็ตควรลบ
+  # disable-secure-session-cookies และ disable-email-verification
+  # disable-registration
+  PENPOT_FLAGS: >
+    disable-email-verification
+    enable-smtp
+    enable-prepl-server
+    disable-secure-session-cookies
+
+# URL ที่ผู้ใช้จะเข้าใช้งาน Penpot
+x-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: http://penpot.shopsthai.com
+
+# ขนาด body / upload
+x-body-size: &penpot-http-body-size # Max body size (30MiB)
+  PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 31457280
+  # Max multipart body size (350MiB)
+  PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
+
+# SECRET KEY (ต้องเปลี่ยน!)
+x-secret-key: &penpot-secret-key
+  PENPOT_SECRET_KEY: your_secret_key
+
+volumes:
+  penpot_postgres_v15:
+  penpot_assets:
+  # penpot_traefik:
+  # penpot_minio:
+
+services:
+  ## ถ้าจะใช้ traefik + https ค่อยมาแก้ส่วนนี้ทีหลัง
+  # traefik:
+  #   image: traefik:v3.3
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--entryPoints.web.address=:80"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entryPoints.websecure.address=:443"
+  #     - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+  #     - "--certificatesresolvers.letsencrypt.acme.email="
+  #     - "--certificatesresolvers.letsencrypt.acme.storage=/traefik/acme.json"
+  #   volumes:
+  #     - "penpot_traefik:/traefik"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+
+  penpot-frontend:
+    image: "penpotapp/frontend:${PENPOT_VERSION:-latest}"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    # ports:
+    #   - "9001:8080"      # เปิดให้เข้า http://SERVER_IP:9001
+    volumes:
+      - penpot_assets:/opt/data/assets
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+    labels:
+      com.docker.compose.project: "penpot-like-figma-server"
+      virtual.host: "penpot.yourdomain.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.penpot-https.rule=Host(`your.domain.com`)"
+    #   - "traefik.http.routers.penpot-https.entrypoints=websecure"
+    #   - "traefik.http.routers.penpot-https.tls.certresolver=letsencrypt"
+    #   - "traefik.http.routers.penpot-https.tls=true"
+    environment:
+      <<: [*penpot-flags, *penpot-http-body-size]
+      TZ: Asia/Bangkok
+
+  penpot-backend:
+    image: "penpotapp/backend:${PENPOT_VERSION:-latest}"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    volumes:
+      - penpot_assets:/opt/data/assets
+    depends_on:
+      penpot-postgres:
+        condition: service_healthy
+      penpot-valkey:
+        condition: service_healthy
+
+    environment:
+      <<:
+        [
+          *penpot-flags,
+          *penpot-public-uri,
+          *penpot-http-body-size,
+          *penpot-secret-key,
+        ]
+
+      # DB
+      PENPOT_DATABASE_URI: postgresql://penpot-postgres/penpot
+      PENPOT_DATABASE_USERNAME: penpot
+      PENPOT_DATABASE_PASSWORD: penpot
+
+      # Redis/Valkey
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+
+      # เก็บ asset เป็นไฟล์ใน volume
+      PENPOT_ASSETS_STORAGE_BACKEND: assets-fs
+      PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
+
+      # Telemetry (จะส่ง usage แบบ anonymous กลับไปที่ Penpot)
+      PENPOT_TELEMETRY_ENABLED: "true"
+      PENPOT_TELEMETRY_REFERER: compose
+
+      # SMTP — default ส่งไปที่ mailcatcher (ใช้เทสอย่างเดียว)
+      PENPOT_SMTP_DEFAULT_FROM: no-reply@example.com
+      PENPOT_SMTP_DEFAULT_REPLY_TO: no-reply@example.com
+      PENPOT_SMTP_HOST: penpot-mailcatch
+      PENPOT_SMTP_PORT: 1025
+      PENPOT_SMTP_USERNAME:
+      PENPOT_SMTP_PASSWORD:
+      PENPOT_SMTP_TLS: "false"
+      PENPOT_SMTP_SSL: "false"
+      TZ: Asia/Bangkok
+
+  penpot-exporter:
+    image: "penpotapp/exporter:${PENPOT_VERSION:-latest}"
+    restart: always
+    depends_on:
+      penpot-valkey:
+        condition: service_healthy
+    environment:
+      <<: [*penpot-secret-key]
+      # ใช้ internal docker network คุยกับ frontend
+      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+
+  penpot-postgres:
+    image: "postgres:15"
+    restart: always
+    stop_signal: SIGINT
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    volumes:
+      - penpot_postgres_v15:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_INITDB_ARGS=--data-checksums
+      - POSTGRES_DB=penpot
+      - POSTGRES_USER=penpot
+      - POSTGRES_PASSWORD=penpot
+
+  penpot-valkey:
+    image: "valkey/valkey:8.1"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+    environment:
+      - VALKEY_EXTRA_FLAGS=--maxmemory 128mb --maxmemory-policy volatile-lfu
+
+  penpot-mailcatch:
+    image: sj26/mailcatcher:latest
+    restart: always
+    # expose:
+    #   - "1025"     # smtp port
+    # ports:
+    #   - "1080:1080"  # เข้าอ่านเมลเทสที่ http://SERVER_IP:1080
+
+  # ถ้าจะใช้ MinIO (S3) แทน filesystem ค่อยมาเปิดส่วนนี้
+  # minio:
+  #   image: "minio/minio:latest"
+  #   command: minio server /mnt/data --console-address ":9001"
+  #   restart: always
+  #   volumes:
+  #     - "penpot_minio:/mnt/data"
+  #   environment:
+  #     - MINIO_ROOT_USER=minioadmin
+  #     - MINIO_ROOT_PASSWORD=minioadmin
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+
+networks:
+  default:
+    external: true
+    name: proxy-network
