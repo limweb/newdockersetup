@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:8.4.0-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "xx.xx.xx.xx:6379:6379"  # แก้ไข IP ของคุณ ตัวอย่าง xx.xx.xx.xx ให้ใช้ private ภายในเท่านั้น
+    expose:
+      - "6379"
+    restart: on-failure
+    command: /bin/sh -c "redis-server --save 3600 1 300 100 60 10000 --loglevel warning --appendonly yes --requirepass $$REDISCLI_AUTH"
+    env_file:
+      - redis.env
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
+
+networks:
+  default:
+    external: true
+    name: proxy-network
