@@ -1,0 +1,50 @@
+#  docker-compose -f docker-compose.yml config check # validate config
+# การ proxy ใช้ socat หรือ nginx หรือ network mode เพื่อ bind port ของ container/host  ให้สามารถเข้าถึงได้จากภายนอก
+# ผ่าน virtual.host ที่กำหนดใน labels เพื่อให้ traefik สามารถ forward  traffic ไปยัง container ได้
+# มี 3 แบบ คือ socat, nginx, network mode ตามตัวอย่าง
+version: "3.8"
+services:
+  # ใช้ socat เป็น proxy
+  jarvis-proxy:
+    image: alpine/socat
+    # host.docker.internal คือ hostname ของ host machine บน windows
+    command:
+      ["TCP-LISTEN:18789,reuseaddr,fork", "TCP:host.docker.internal:18789"]
+    # gateway ของ docker bridge: 172.17.0.1 (macOS ใช้ docker0)
+    # ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'
+    # command: ["TCP-LISTEN:18789,reuseaddr,fork","TCP:172.17.0.1:18789"] # host.docker.internal
+    labels:
+      com.docker.compose.project: "clawbot"
+      virtual.host: "jarvis.domain.com"
+      virtual.tls-email: "your@email.com"
+      virtual.port: "18789"
+
+  # ใช้ nginx แทน socat
+  jarvis-proxy-nginx:
+    image: nginx:alpine
+    volumes:
+      - ./jarvis.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
+    labels:
+      com.docker.compose.project: "clawbot"
+      virtual.host: "jarvis-nginx.domain.com"
+      virtual.tls-email: "your@email.com"
+      virtual.port: "18789"
+
+  # ใช้ network mode ของ service อื่น
+  socat-proxy-networkmode:
+    image: alpine/socat
+    container_name: openclaw-socat
+    restart: unless-stopped
+    network_mode: "service:openclaw-gateway"
+    command: "TCP-LISTEN:18790,fork,bind=0.0.0.0,reuseaddr TCP:127.0.0.1:18789"
+    labels:
+      com.docker.compose.project: "clawbot"
+      virtual.host: "jarvis-networkmode.domain.com"
+      virtual.tls-email: "your@email.com"
+      virtual.port: "18790"
+
+networks:
+  default:
+    external: true
+    name: proxy-network
