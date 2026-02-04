@@ -40,6 +40,31 @@ services:
         max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
         max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 
+  pgbouncer:
+    image: edoburu/pgbouncer:1.20
+    restart: unless-stopped
+    ports:
+      - "6432:6432"
+    environment:
+      TZ: Asia/Bangkok
+      PGTZ: Asia/Bangkok
+      PGBOUNCER_PORT: 6432
+      PGBOUNCER_LISTEN_ADDR: 0.0.0.0
+      PGBOUNCER_USER: postgres
+      PGBOUNCER_PASSWORD: your_postgres_password
+      PGBOUNCER_DATABASE: mydb
+      PGBOUNCER_SERVERS: dbpostgresql
+      DB_HOST: dbpostgresql        # ← private IP ของ PostgreSQL บน host
+      DB_PORT: 5432                # ← port ของ PostgreSQL
+      DB_NAME: mydb                # ← ชื่อฐานข้อมูล
+      DB_USER: postgres            # ← ชื่อผู้ใช้ของ PostgreSQL
+      DB_PASSWORD: your_postgres_password # ← รหัสผ่านของ PostgreSQL
+      POOL_MODE: transaction # โหมดการจัดการการเชื่อมต่อ default: transaction 
+      MIN_POOL_SIZE: 5 # จํานวนการเชื่อมต่อเริ่มต้น
+      MAX_CLIENT_CONN: 300 # จํานวนการเชื่อมต่อสูงสุด
+      DEFAULT_POOL_SIZE: 25 # จํานวนการเชื่อมต่อเริ่มต้น
+      MAX_DB_CONNECTIONS: 100 # จํานวนการเชื่อมต่อสูงสุด
+
 networks:
   default:
     external: true
