@@ -1,0 +1,31 @@
+services:
+  termix:
+    image: ghcr.io/lukegus/termix:latest
+    container_name: termix
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - termix-data:/app/data
+    labels:
+      com.docker.compose.project: "termix"
+      virtual.host: "termix.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      PORT: "8080"
+      TZ: Asia/Bangkok
+    logging:
+      driver: "json-file" # ใช้ json-file driver (default)
+      options:
+        max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
+        max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
+
+volumes:
+  termix-data:
+    driver: local
+
+networks:
+  default:
+    external: true
+    name: proxy-network
