@@ -15,6 +15,10 @@ services:
     environment:
       PORT: "8080"
       TZ: Asia/Bangkok
+      DISABLE_REGISTRATION: "true"
+      DEFAULT_USERNAME: "admin"
+      DEFAULT_PASSWORD: "your_stone_password_admin123"
+      DEFAULT_ROLE: "admin"
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:
