@@ -1,0 +1,14 @@
+:8080 {
+    handle /apps/* {
+        root * /srv/apps
+        file_server browse
+    }
+    root * /srv/www
+    encode gzip
+    try_files {path} /index.html?{query}&p={path}
+    file_server
+
+    log {
+        output stdout
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "vue-keycloak",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "pinia": "^2.1.7",
+    "keycloak-js": "^24.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vite-pwa/assets-generator": "^0.2.4",
+    "typescript": "^5.4.2",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^0.19.2",
+    "vue-tsc": "^2.0.6",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.18"
+  }
+}

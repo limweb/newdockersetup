@@ -3,3 +3,6 @@ portainer/portainer/*
 caddy-genproxy/caddy/*
 wordpress/wp/*
 .windsurf/*
+caddy-gen-apigateway/web1/.env
+caddy-gen-apigateway/api/.env
+caddy-gen-apigateway/web2/.env
