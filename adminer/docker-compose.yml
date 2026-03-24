@@ -1,0 +1,27 @@
+#  docker-compose -f docker-compose.yml config check validate config
+services:
+  adminer:
+    image: adminer:alpine
+    container_name: adminer_client
+    restart: "always"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    labels:
+      com.docker.compose.project: "adminer_client"
+      virtual.host: "adminer.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      TZ: Asia/Bangkok
+      VIRTUAL_HOST: "adminer.local.com"
+      VIRTUAL_PORT: "8080"
+      LETSENCRYPT_HOST: "adminer.local.com"
+      LETSENCRYPT_EMAIL: your@email.com
+      ADMINER_DESIGN: pepa-linha
+
+networks:
+  default:
+    external: true
+    name: proxy-network
