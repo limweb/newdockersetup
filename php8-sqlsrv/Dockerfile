@@ -1,4 +1,4 @@
-FROM caddy:2.9.1-alpine as caddy
+FROM caddy:alpine as caddy
 FROM mcr.microsoft.com/mssql-tools:latest as mssql
 FROM php:8.1-fpm-alpine3.21
 

@@ -1,4 +1,4 @@
-FROM caddy/caddy:v2.0.0-beta.17 as caddy
+FROM caddy:alpine as caddy
 
 FROM php:7.4.15-fpm-alpine3.13
 

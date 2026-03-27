@@ -1,9 +1,9 @@
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
   php-restserver:
-    image: caddy:latest
+    image: caddy:alpine
     ports:
       - "8080:8080"
     working_dir: /var/www/html
@@ -60,96 +60,96 @@ services:
 
   # docker-compose run --rm generate-keys
   generate-keys:
-      image: alpine/openssl
-      volumes:
-        - ./php/configs:/keys
-      command: >
-        sh -c "
-          if [ ! -f '/keys/private.key' ] || [ ! -f '/keys/public.key' ]; then
-            echo 'Generating RSA keys...';
-            # Generate private key with strong encryption
-            openssl genpkey -algorithm RSA \
-              -pkeyopt rsa_keygen_bits:4096 \
-              -aes-256-cbc \
-              -pbkdf2 \
-              -out /keys/private.key \
-              -pass pass:${RSA_PASSPHRASE:-mysecretpass};
-            
-            # Generate public key
-            openssl rsa \
-              -in /keys/private.key \
-              -out /keys/public.key \
-              -pubout \
-              -outform PEM \
-              -passin pass:${RAS_PASSPHRASE:-mysecretpass};
-            
-            # Set proper permissions
-            chmod 644 /keys/private.key /keys/public.key;
-            echo 'RSA keys generated successfully';
-          else
-            echo 'RSA keys already exist, skipping generation';
-          fi
-        "
-      environment:
-        - RAS_PASSPHRASE=${RSA_PASSPHRASE:-mysecretpass}
-      deploy:
-        restart_policy:
-          condition: on-failure
-          max_attempts: 1        
+    image: alpine/openssl
+    volumes:
+      - ./php/configs:/keys
+    command: >
+      sh -c "
+        if [ ! -f '/keys/private.key' ] || [ ! -f '/keys/public.key' ]; then
+          echo 'Generating RSA keys...';
+          # Generate private key with strong encryption
+          openssl genpkey -algorithm RSA \
+            -pkeyopt rsa_keygen_bits:4096 \
+            -aes-256-cbc \
+            -pbkdf2 \
+            -out /keys/private.key \
+            -pass pass:${RSA_PASSPHRASE:-mysecretpass};
+          
+          # Generate public key
+          openssl rsa \
+            -in /keys/private.key \
+            -out /keys/public.key \
+            -pubout \
+            -outform PEM \
+            -passin pass:${RAS_PASSPHRASE:-mysecretpass};
+          
+          # Set proper permissions
+          chmod 644 /keys/private.key /keys/public.key;
+          echo 'RSA keys generated successfully';
+        else
+          echo 'RSA keys already exist, skipping generation';
+        fi
+      "
+    environment:
+      - RAS_PASSPHRASE=${RSA_PASSPHRASE:-mysecretpass}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
 
 # mssql
-  # mssql:
-  #   image: mcr.microsoft.com/mssql/server:2022-latest
-  #   environment:
-  #     TZ: Asia/Bangkok
-  #     ACCEPT_EULA: "Y"
-  #     MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
-  #     MSSQL_PID: Express
-  #   ports:
-  #     - "1433:1433"
-  #   volumes:
-  #     - mssql_data:/var/opt/mssql
-  #   restart: unless-stopped
-  
+# mssql:
+#   image: mcr.microsoft.com/mssql/server:2022-latest
+#   environment:
+#     TZ: Asia/Bangkok
+#     ACCEPT_EULA: "Y"
+#     MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
+#     MSSQL_PID: Express
+#   ports:
+#     - "1433:1433"
+#   volumes:
+#     - mssql_data:/var/opt/mssql
+#   restart: unless-stopped
+
 # postgresql
-  # postgres:
-  #   image: postgres:18-alpine
-  #   environment:
-  #     TZ: Asia/Bangkok
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: postgres
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   restart: unless-stopped
+# postgres:
+#   image: postgres:18-alpine
+#   environment:
+#     TZ: Asia/Bangkok
+#     POSTGRES_USER: postgres
+#     POSTGRES_PASSWORD: postgres
+#     POSTGRES_DB: postgres
+#   ports:
+#     - "5432:5432"
+#   volumes:
+#     - postgres_data:/var/lib/postgresql/data
+#   restart: unless-stopped
 
 # mariadb
-  # mariadb:
-  #   image: mariadb:11.1
-  #   environment:
-  #     TZ: Asia/Bangkok
-  #     MYSQL_ROOT_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
-  #     MYSQL_DATABASE: "mariadb"
-  #     MYSQL_USER: "mariadb"
-  #     MYSQL_PASSWORD: "YourStrong@Passw0rd"
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - mariadb_data:/var/lib/mysql
-  #   restart: unless-stopped
+# mariadb:
+#   image: mariadb:11.1
+#   environment:
+#     TZ: Asia/Bangkok
+#     MYSQL_ROOT_PASSWORD: "YourStrong@Passw0rd"  # 🔒 ห้ามใช้ใน production แบบนี้!
+#     MYSQL_DATABASE: "mariadb"
+#     MYSQL_USER: "mariadb"
+#     MYSQL_PASSWORD: "YourStrong@Passw0rd"
+#   ports:
+#     - "3306:3306"
+#   volumes:
+#     - mariadb_data:/var/lib/mysql
+#   restart: unless-stopped
 
 # redis
-  # redis:
-  #   image: redis:alpine
-  #   environment:
-  #     TZ: Asia/Bangkok
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-  #   restart: unless-stopped
+# redis:
+#   image: redis:alpine
+#   environment:
+#     TZ: Asia/Bangkok
+#   ports:
+#     - "6379:6379"
+#   volumes:
+#     - redis_data:/data
+#   restart: unless-stopped
 
 volumes:
   caddy_data:
@@ -162,4 +162,4 @@ volumes:
 networks:
   default:
     external: true
-    name: proxy-network  
+    name: proxy-network

@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   your_server_name:
-    image: "caddy:2.8.4-alpine"
+    image: "caddy:alpine"
     labels:
       com.docker.compose.project: "your_server_name"
       # for caddy-gen-proxy
