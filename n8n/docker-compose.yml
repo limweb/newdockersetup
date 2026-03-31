@@ -35,19 +35,18 @@ services:
     depends_on:
       - db_n8n
       - redis
- 
+
   db_n8n:
     image: postgres:14
     restart: always
     environment:
-      
       - POSTGRES_USER=${DB_POSTGRESDB_USER}
       - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}
       - POSTGRES_DB=${DB_POSTGRESDB_DATABASE}
       - POSTGRES_NON_ROOT_USER=${DB_POSTGRESDB_USER}
       - POSTGRES_NON_ROOT_PASSWORD=${DB_POSTGRESDB_PASSWORD}
     # ports:
-      # - "15430:5432"
+    # - "15430:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - postgres-init:/docker-entrypoint-initdb.d
@@ -87,6 +86,9 @@ services:
     #   - 56379:6379
 
 volumes:
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   redis-data:
   postgres-data:
   postgres-init:

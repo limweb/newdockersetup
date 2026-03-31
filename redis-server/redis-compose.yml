@@ -8,7 +8,7 @@ services:
       timeout: 3s
       retries: 5
     ports:
-      - "xx.xx.xx.xx:6379:6379"  # แก้ไข IP ของคุณ ตัวอย่าง xx.xx.xx.xx ให้ใช้ private ภายในเท่านั้น
+      - "xx.xx.xx.xx:6379:6379" # แก้ไข IP ของคุณ ตัวอย่าง xx.xx.xx.xx ให้ใช้ private ภายในเท่านั้น
     expose:
       - "6379"
     restart: on-failure
@@ -19,6 +19,9 @@ services:
       - redis-data:/data
 
 volumes:
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   redis-data:
 
 networks:

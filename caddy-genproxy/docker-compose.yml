@@ -20,7 +20,10 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-volumes:
+volumes: 
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   caddy-data:
   caddy-info:
 

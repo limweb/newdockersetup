@@ -26,6 +26,9 @@ x-secret-key: &penpot-secret-key
   PENPOT_SECRET_KEY: your_secret_key
 
 volumes:
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   penpot_postgres_v15:
   penpot_assets:
   # penpot_traefik:

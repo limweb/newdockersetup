@@ -54,12 +54,12 @@ services:
       PGBOUNCER_PASSWORD: your_postgres_password
       PGBOUNCER_DATABASE: mydb
       PGBOUNCER_SERVERS: dbpostgresql
-      DB_HOST: dbpostgresql        # ← private IP ของ PostgreSQL บน host
-      DB_PORT: 5432                # ← port ของ PostgreSQL
-      DB_NAME: mydb                # ← ชื่อฐานข้อมูล
-      DB_USER: postgres            # ← ชื่อผู้ใช้ของ PostgreSQL
+      DB_HOST: dbpostgresql # ← private IP ของ PostgreSQL บน host
+      DB_PORT: 5432 # ← port ของ PostgreSQL
+      DB_NAME: mydb # ← ชื่อฐานข้อมูล
+      DB_USER: postgres # ← ชื่อผู้ใช้ของ PostgreSQL
       DB_PASSWORD: your_postgres_password # ← รหัสผ่านของ PostgreSQL
-      POOL_MODE: transaction # โหมดการจัดการการเชื่อมต่อ default: transaction 
+      POOL_MODE: transaction # โหมดการจัดการการเชื่อมต่อ default: transaction
       MIN_POOL_SIZE: 5 # จํานวนการเชื่อมต่อเริ่มต้น
       MAX_CLIENT_CONN: 300 # จํานวนการเชื่อมต่อสูงสุด
       DEFAULT_POOL_SIZE: 25 # จํานวนการเชื่อมต่อเริ่มต้น
@@ -71,5 +71,8 @@ networks:
     name: proxy-network
 
 volumes:
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   pgadmin:
   sqldata:

@@ -25,6 +25,9 @@ services:
         max-size: "10m" # จำกัดขนาดของแต่ละไฟล์ log ไม่ให้เกิน 10MB
         max-file: "5" # เก็บไฟล์ log ไว้สูงสุด 5 ไฟล์
 volumes:
+  #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
+  # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata
+  #ถ้าซ้ำจะทำให้ ข้อมูลถูกใช้ทับกันครับ ต้อง เปลียนเป้น sqldata2 เป็นต้น
   mongodb-data:
 
 networks:
