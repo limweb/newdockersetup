@@ -11,11 +11,15 @@ services:
       - "3306"
     volumes:
       - ./mariadb_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql # โหลด SQL ตอนสร้าง DB ครั้งแรก
     environment:
       TZ: Asia/Bangkok
-      MYSQL_ROOT_PASSWORD: toor
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: dbpass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-toor}
+      MARIADB_RANDOM_ROOT_PASSWORD: false
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: false
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-dbname}
+      MYSQL_USER: ${MYSQL_USER:-dbuser}
+      MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-dbpass}
     logging:
       driver: "json-file" # ใช้ json-file driver (default)
       options:

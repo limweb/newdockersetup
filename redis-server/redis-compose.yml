@@ -12,9 +12,16 @@ services:
     expose:
       - "6379"
     restart: on-failure
-    command: /bin/sh -c "redis-server --save 3600 1 300 100 60 10000 --loglevel warning --appendonly yes --requirepass $$REDISCLI_AUTH"
-    env_file:
-      - redis.env
+    command:
+      - redis-server
+      - --save
+      - "3600 1 300 100 60 10000"
+      - --loglevel
+      - warning
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - ${REDIS_PASSWORD}
     volumes:
       - redis-data:/data
 

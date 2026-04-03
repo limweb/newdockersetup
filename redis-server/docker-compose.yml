@@ -4,16 +4,28 @@ version: "3.8"
 services:
   redis-queue:
     image: redis:7-alpine
-    container_name: redis-queue
+    container_name: daikin-redis
     restart: always
     ports:
-      - "x.x.x.x:6379:6379" # แก้ไข IP ของคุณ ตัวอย่าง xx.xx.xx.xx ให้ใช้ private ภายในเท่านั้น
+      - "6379:6379" # แก้ไข IP ของคุณ ตัวอย่าง xx.xx.xx.xx ให้ใช้ private ภายในเท่านั้น
+    expose:
+      - "6379"
     environment:
       - TZ=Asia/Bangkok # หรือเปลี่ยนเป็น UTC ก็ได้ เช่น TZ=UTC
     volumes:
       - redis-data:/data
+      # - ./sql/backup.txt:/data/backup.txt
+      # - ./sql/daikin.rdb:/data/dump.rdb
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command:
+      [
+        "redis-server",
+        "/usr/local/etc/redis/redis.conf",
+        "--appendonly",
+        "yes",
+        "--requirepass",
+        "${REDIS_PASSWORD}",
+      ]
     sysctls:
       net.core.somaxconn: 1024
     ulimits:
