@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     name: "ApiTest",
     component: () => import("@/views/ApiTestView.vue"),
   },
+  {
+    path: "/test-api",
+    name: "TestApi",
+    component: () => import("@/views/TestApiView.vue"),
+  },
 ];
 
 const router = createRouter({

@@ -5,6 +5,7 @@ import { cors } from "@elysiajs/cors";
 const SSO_SERVER = process.env.SSO_AUTH_SERVER || "sso.shopsthai.com";
 const SSO_REALM = process.env.SSO_REALM || "shopsthai.app";
 const API_PORT = parseInt(process.env.API_PORT || "3000");
+const BIND_ADDRESS = process.env.BIND_ADDRESS || "0.0.0.0";
 
 const JWKS_URI = `https://${SSO_SERVER}/realms/${SSO_REALM}/protocol/openid-connect/certs`;
 const ISSUER = `https://${SSO_SERVER}/realms/${SSO_REALM}`;
@@ -58,6 +59,31 @@ const app = new Elysia()
     };
   })
   .get("/health", () => ({ status: "ok" }))
-  .listen(API_PORT);
+  .all(
+    "/testapi",
+    ({ request, query, body, cookie, headers, path, params }) => {
+      const url = new URL(request.url);
+      return {
+        method: request.method,
+        path: path,
+        url: request.url,
+        pathname: url.pathname,
+        search: url.search,
+        query: query,
+        params: params,
+        headers: Object.fromEntries(request.headers.entries()),
+        cookies: cookie,
+        body: body,
+        contentType: request.headers.get("content-type"),
+        contentLength: request.headers.get("content-length"),
+        userAgent: request.headers.get("user-agent"),
+        host: request.headers.get("host"),
+        origin: request.headers.get("origin"),
+        referer: request.headers.get("referer"),
+        timestamp: new Date().toISOString(),
+      };
+    },
+  )
+  .listen({ port: API_PORT, hostname: BIND_ADDRESS });
 
-console.log(`API server running at http://localhost:${API_PORT}`);
+console.log(`API server running at http://${BIND_ADDRESS}:${API_PORT}`);

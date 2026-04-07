@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useAuthStore } from "@/stores";
 
 const authStore = useAuthStore();
 const apiResponse = ref<any>(null);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
+
+const apiBaseUrl = computed(() => import.meta.env.VITE_API_BASE_URL);
 
 async function callApi() {
   isLoading.value = true;
@@ -16,7 +18,7 @@ async function callApi() {
     // Refresh token ก่อนเรียก API
     await authStore.refreshToken();
 
-    const response = await fetch("https://api.shopsthai.com/me", {
+    const response = await fetch(`${apiBaseUrl.value}/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${authStore.token}`,
@@ -85,7 +87,7 @@ async function callApi() {
           <div class="mb-6">
             <p class="text-sm text-gray-500 mb-2">Endpoint:</p>
             <code class="bg-gray-100 px-3 py-2 rounded text-sm block"
-              >POST https://api.shopsthai.com/me</code
+              >{{ apiBaseUrl }}/me</code
             >
           </div>
 

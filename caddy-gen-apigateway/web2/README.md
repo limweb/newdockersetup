@@ -14,9 +14,9 @@ Vue 3 + Vite + TypeScript + TailwindCSS + Keycloak SSO
 
 ## Keycloak Configuration
 
-- **URL**: `https://sso.shopsthai.com`
-- **Realm**: `shopsthai.app`
-- **Client ID**: `shopsthai-web1`
+- **URL**: `https://sso.yourdomain.com`
+- **Realm**: `yourdomain.app`
+- **Client ID**: `yourdomain-web1`
 
 ## Setup
 
