@@ -7,8 +7,8 @@ Template นี้ใช้สำหรับ generate Caddyfile จาก Docke
 ## 1. Global Labels
 
 | Label               | คำอธิบาย                           | ค่าตัวอย่าง |
-| ------------------- | ---------------------------------- | ----------- | --- |
-| `global.cloudflare` | เปิดใช้ Cloudflare trusted proxies | `"true"`    | W   |
+| ------------------- | ---------------------------------- | ----------- |
+| `global.cloudflare` | เปิดใช้ Cloudflare trusted proxies | `"true"`    |W
 
 ---
 

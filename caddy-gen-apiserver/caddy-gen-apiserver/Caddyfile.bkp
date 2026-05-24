@@ -1,0 +1,387 @@
+{{/* Compute global settings from container labels */}}
+{{ $cloudflareEnabled := false }}
+{{ range $ }}{{ if eq (trim (index .Labels "global.cloudflare")) "true" }}{{ $cloudflareEnabled = true }}{{ end }}{{ end }}
+
+{
+	# Global Options
+	auto_https disable_redirects
+	log {
+		output file /data/caddy/caddy.log {
+			roll_size 100mb
+			roll_keep 100
+			roll_keep_for 720h
+		}
+		format json
+		level ERROR
+	}
+  servers {
+		{{ if $cloudflareEnabled }}trusted_proxies cloudflare {
+			interval 12h
+			timeout 15s
+		}{{ else }}trusted_proxies static 0.0.0.0/0{{ end }}
+	}
+	order jwtauth before basicauth
+}
+
+(health_check) {
+  # === Snippet สำหรับ Health Check ===
+  @health path /health
+  handle @health {
+    respond "OK" 200
+  }
+}
+
+(cors_preflight) {
+  # CORS Preflight (ต้องมาก่อนเสมอ เพื่อตอบ 204 ทันที)
+  @cors_preflight method OPTIONS
+  handle @cors_preflight {
+    header {
+      Access-Control-Allow-Origin "*"
+      Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+      Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      Access-Control-Max-Age "86400"
+      # Access-Control-Allow-Credentials "true"      
+    }
+    respond "" 204
+  }
+}
+
+(security_headers) {
+  # Security Headers
+  header {
+    -Server
+    -X-Powered-By
+    -Link
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "same-origin"
+    Permissions-Policy "geolocation=()"
+  }
+}
+
+(security_headers_with_cors) {
+  # Security Headers with CORS
+  header {
+    -Server
+    -X-Powered-By
+    -Link
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "same-origin"
+    Permissions-Policy "geolocation=()"
+    # CORS Headers สำหรับคำตอบปกติ
+    Access-Control-Allow-Origin "*"
+    Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    Access-Control-Expose-Headers "X-User-Sub, X-User-Email, X-User-Roles"
+    #Access-Control-Allow-Credentials "true"
+  }
+}
+
+(proxy_headers) {
+  # Common Proxy Headers
+  header_up X-Real-IP {remote_host}
+  header_up X-Tlen-IP {remote_host}
+}
+
+(block-sensitive-files) {
+  # Block Sensitive Files
+  @blocked {
+    path *.md *.mdown .htaccess .git .gitignore .env /.git* /.git/* /configs/* /vendor/* /config/* /cronjob/*
+  }
+  respond @blocked 403
+}
+
+(user_claims_config) {
+  # 👤 User ID หลัก: ใช้ 'sub' (UUID) เป็นหลัก
+  user_claims sub id uid user_id username login
+  # 📦 ข้อมูลเสริม: แมปจาก Claim → ชื่อตัวแปรใน Caddy
+  # 📦 ข้อมูลเสริม (ชื่อหลัง -> ต้องตรงกับ header_up)
+  meta_claims "email->user_email" "preferred_username->user_username" "name->user_full_name"  \ 
+  "given_name->user_first_name" "family_name->user_last_name" "realm_access.roles->user_roles" \
+  "allowed-origins->user_allowed_origins" "resource_access.account.roles->account_roles"
+}
+
+(user_headers_to_backend) {
+  # 📤 ส่งค่าไป Backend ผ่าน Header
+  header_up X-User-Id {http.auth.user.id}
+  header_up X-User-Email {http.auth.user.user_email}
+  header_up X-Username {http.auth.user.user_username}       
+  header_up X-Full-Name {http.auth.user.user_full_name}     
+  header_up X-First-Name {http.auth.user.user_first_name}   
+  header_up X-Last-Name {http.auth.user.user_last_name}     
+  # Allowed Origins (อาจเป็น JSON array string)
+  header_up X-User-Allowed-Origins {http.auth.user.user_allowed_origins}
+  # Roles (อาจเป็น JSON array string)
+  header_up X-User-Account-Roles {http.auth.user.account_roles}
+  header_up X-User-Roles {http.auth.user.user_roles}
+  # 🔐 Security: ลบ Authorization header ออกก่อนส่งต่อ (ไม่จำเป็นให้ Backend เห็น)
+  header_up -Authorization
+}
+
+{{ $hosts := groupByLabel $ "virtual.host" }}
+
+{{ if not $hosts }}
+
+127.0.0.1:2015 {
+  log {
+      output stdout
+  }
+  metrics
+}
+
+{{ else }}
+
+{{ range $h, $containers := $hosts }}
+{{ $c := first $containers }}
+{{ $allhosts := trim (index $c.Labels "virtual.host") }}
+{{ range $t, $host := split $allhosts " " }}
+{{ $tlsEmail := trim (index $c.Labels "virtual.tls-email") }}
+{{ $tlsConfig := trim (index $c.Labels "virtual.tls") }}
+{{ $tlsEnv := or $tlsEmail $tlsConfig }}
+{{ $tlsOff := eq $tlsEnv "" }}
+{{ $tlsOn := ne $tlsEnv "" }}
+{{ $alias := trim (index $c.Labels "virtual.alias") }}
+{{ $aliasPresent := ne $alias "" }}
+{{ $authUsername := trim (index $c.Labels "virtual.auth.username") }}
+{{ $authPassword := trim (index $c.Labels "virtual.auth.password") }}
+{{ $authPath := trim (index $c.Labels "virtual.auth.path") }}
+{{ $basicauth := and (ne $authUsername "") (ne $authPassword "") }}
+{{ $hostDirectives := trim (index $c.Labels "virtual.host.directives") }}
+{{ $hostImport := trim (index $c.Labels "virtual.host.import") }}
+{{ $proxyMatcher := trim (index $c.Labels "virtual.proxy.matcher") }}
+{{ $proxyDirectives := trim (index $c.Labels "virtual.proxy.directives") }}
+{{ $proxyLBPolicy := or (trim (index $c.Labels "virtual.proxy.lb_policy")) "round_robin" }}
+{{ $proxyImport := trim (index $c.Labels "virtual.proxy.import") }}
+
+# JWT Configuration from virtual labels
+{{ $jwtIssuer := trim (index $c.Labels "virtual.jwt.issuer") }}
+{{ $jwtAudience := trim (index $c.Labels "virtual.jwt.audience") }}
+{{ $jwtJwks := trim (index $c.Labels "virtual.jwt.jwks_uri") }}
+{{ $jwtRole := trim (index $c.Labels "virtual.jwt.require_role") }}
+{{ $jwtEnabled := and (ne $jwtIssuer "") (ne $jwtJwks "") }}
+
+# JWT Configuration from auth labels (simplified)
+{{ $authValidateJwt := trim (index $c.Labels "auth.validatejwt") }}
+{{ $authServer := trim (index $c.Labels "auth.server") }}
+{{ $authRealm := trim (index $c.Labels "auth.realm") }}
+{{ $authRoles := trim (index $c.Labels "auth.roles") }}
+{{ $authClientid := trim (index $c.Labels "auth.clientid") }}
+{{ $authPublicPaths := trim (index $c.Labels "auth.public_paths") }}
+
+# Map auth.* to virtual.jwt.* if auth labels are present
+{{ if and (eq $jwtIssuer "") (ne $authServer "") }}
+{{ $jwtIssuer = print "https://" $authServer "/realms/" $authRealm }}
+{{ end }}
+{{ if and (eq $jwtAudience "") (ne $authRealm "") }}
+{{ $jwtAudience = $authRealm }}
+{{ end }}
+{{ if and (eq $jwtJwks "") (ne $authServer "") }}
+{{ $jwtJwks = print "https://" $authServer "/realms/" $authRealm "/protocol/openid-connect/certs" }}
+{{ end }}
+{{ if and (eq $jwtRole "") (ne $authRoles "") }}
+{{ $jwtRole = $authRoles }}
+{{ end }}
+
+# Enable JWT if auth.validatejwt=true and we have auth.server
+{{ if and (eq $jwtEnabled false) (eq $authValidateJwt "true") (ne $authServer "") }}
+{{ $jwtEnabled = true }}
+{{ end }}
+
+# Rate Limit Configuration
+{{ $rateLimitZone := trim (index $c.Labels "virtual.ratelimit.zone") }}
+{{ $rateLimitKey := or (trim (index $c.Labels "virtual.ratelimit.key")) "{http.request.remote_ip}" }}
+{{ $rateLimitEvents := or (trim (index $c.Labels "virtual.ratelimit.events")) "100" }}
+{{ $rateLimitWindow := or (trim (index $c.Labels "virtual.ratelimit.window")) "1m" }}
+{{ $rateLimitEnabled := ne $rateLimitZone "" }}
+# Debug Mode - ตั้งค่า log level สำหรับ debugging
+{{ $debugMode := trim (index $c.Labels "virtual.debug") }}
+{{ $isDebug := eq $debugMode "true" }}
+{{ $logLevel := trim (index $c.Labels "virtual.log.level") }}
+{{ $logLevelSet := ne $logLevel "" }}
+{{ if not $logLevelSet }}{{ $logLevel = "ERROR" }}{{ end }}
+{{ if $isDebug }}{{ $logLevel = "DEBUG" }}{{ end }}
+
+{{ if $aliasPresent  }}
+{{ if $tlsOff }}http://{{ end }}{{ $alias }} {
+  redir {{ if $tlsOff }}http://{{ else }}https://{{ end }}{{ $host }}
+}
+{{ end }}
+
+{{ if $tlsOff }}http://{{ end }}{{ $host }} {
+  import health_check
+  {{ if $tlsOn }}tls {{ $tlsEnv }}{{ end }}
+
+  # ===== CONFIGURATION =====
+  # Host: {{ $host }}
+  {{ if $tlsOn }}# TLS Mode: {{ $tlsEnv }}{{ end }}
+  {{ if $jwtEnabled }}# JWT: Enabled ({{ $jwtIssuer }}){{ end }}
+  {{ if $rateLimitEnabled }}# Rate Limit: {{ $rateLimitZone }} ({{ $rateLimitEvents }}/{{ $rateLimitWindow }}){{ end }}
+  {{ if $jwtRole }}# Required Roles: {{ $jwtRole }}{{ end }}
+  {{ if $isDebug }}# DEBUG MODE: Enabled{{ end }}
+  
+  # CORS Configuration - เปิดใช้งานเฉพาะเมื่อระบุ
+  {{ $corsEnabled := trim (index $c.Labels "virtual.cors.enabled") }}
+  {{ $isCorsEnabled := eq $corsEnabled "true" }}
+  {{ if $isDebug }}# DEBUG: corsEnabled = [{{ $corsEnabled }}], isCorsEnabled = [{{ $isCorsEnabled }}]
+  # DEBUG: All labels = [{{ range $k, $v := $c.Labels }}{{ $k }}={{ $v }} {{ end }}]{{ end }}
+  {{ if $isCorsEnabled }}# CORS: Enabled{{ end }}
+
+  encode zstd gzip
+
+  {{ $hostDirectives }}
+  {{ if $hostImport }}import {{ $hostImport }}{{ end }}
+
+  {{ if $isCorsEnabled }}
+  import cors_preflight
+  {{ end }}
+
+  {{ if $jwtEnabled }}
+  {{ if ne $authPublicPaths "" }}
+  # 3a. Public Routes (ไม่ต้องผ่าน JWT)
+  @jwt_bypass path {{ $authPublicPaths }}
+  handle @jwt_bypass {
+    reverse_proxy {{ $proxyMatcher }} {
+      lb_policy {{ $proxyLBPolicy }}
+      {{ $proxyDirectives }}
+      {{ if $proxyImport }}import {{ $proxyImport }}{{ end }}
+      {{ range $i, $container := $containers }}
+      {{ range $j, $net := $container.Networks }}
+      {{ $port := or (trim (index $container.Labels "virtual.port")) "80" }}
+      to {{ $net.IP }}:{{ $port }}
+        {{ end }}
+      {{ end }}
+      header_up Host {{ $host }}
+      import proxy_headers
+    }
+    import security_headers_with_cors
+  }
+  {{ end }}
+  # 3. Protected Routes (ต้องผ่าน JWT) - หุ้มทุกอย่างที่ต้องป้องกันไว้ในนี้
+  handle {
+    # --- JWT Auth ---
+    jwtauth {
+      jwk_url {{ $jwtJwks }}
+      sign_alg RS256
+      from_query access_token token
+      from_header Authorization X-Api-Token
+      from_cookies jwt_session user_session
+      issuer_whitelist {{ $jwtIssuer }}
+      {{ if $jwtAudience }}audience_whitelist {{ $jwtAudience }} account {{ end }}
+      import user_claims_config
+    }
+
+    # ===== RATE LIMIT =====
+    {{ if $rateLimitEnabled }}
+    rate_limit {
+      zone {{ $rateLimitZone }} {
+        key {{ $rateLimitKey }}
+        events {{ $rateLimitEvents }}
+        window {{ $rateLimitWindow }}
+      }
+    }
+    {{ end }}
+
+    # --- Reverse Proxy ---
+    reverse_proxy {{ $proxyMatcher }} {
+      lb_policy {{ $proxyLBPolicy }}
+      {{ $proxyDirectives }}
+      {{ if $proxyImport }}import {{ $proxyImport }}{{ end }}
+      {{ range $i, $container := $containers }}
+      {{ range $j, $net := $container.Networks }}
+      {{ $port := or (trim (index $container.Labels "virtual.port")) "80" }}
+      to {{ $net.IP }}:{{ $port }}
+        {{ end }}
+      {{ end }}
+      header_up Host {{ $host }}
+      import user_headers_to_backend
+      import proxy_headers
+    }
+    # --- Security Headers (ใช้เฉพาะเส้นทางที่ต้องป้องกัน) ---
+    import security_headers_with_cors
+    # --- Block Sensitive Files ---
+    import block-sensitive-files
+  }
+  {{ else if $basicauth }}
+  # ===== BASIC AUTH BLOCK =====
+  basicauth {{ $authPath }} {
+      {{ $authUsername }} {{ $authPassword }}
+  }
+
+  # ===== RATE LIMIT =====
+  {{ if $rateLimitEnabled }}
+  rate_limit {
+    zone {{ $rateLimitZone }} {
+      key {{ $rateLimitKey }}
+      events {{ $rateLimitEvents }}
+      window {{ $rateLimitWindow }}
+    }
+  }
+  {{ end }}
+
+  reverse_proxy {{ $proxyMatcher }} {
+    lb_policy {{ $proxyLBPolicy }}
+    {{ $proxyDirectives }}
+    {{ if $proxyImport }}import {{ $proxyImport }}{{ end }}
+    {{ range $i, $container := $containers }}
+    {{ range $j, $net := $container.Networks }}
+    {{ $port := or (trim (index $container.Labels "virtual.port")) "80" }}
+    to {{ $net.IP }}:{{ $port }}
+      {{ end }}
+    {{ end }}
+    header_up Host {{ $host }}
+    import proxy_headers
+  }
+  # --- Security Headers ---
+  import security_headers
+  # --- Block Sensitive Files ---
+  import block-sensitive-files
+  {{ else }}
+  # ===== NO AUTH MODE =====
+  # ===== RATE LIMIT =====
+  {{ if $rateLimitEnabled }}
+  rate_limit {
+    zone {{ $rateLimitZone }} {
+      key {{ $rateLimitKey }}
+      events {{ $rateLimitEvents }}
+      window {{ $rateLimitWindow }}
+    }
+  }
+  {{ end }}
+
+  reverse_proxy {{ $proxyMatcher }} {
+    lb_policy {{ $proxyLBPolicy }}
+    {{ $proxyDirectives }}
+    {{ if $proxyImport }}import {{ $proxyImport }}{{ end }}
+    {{ range $i, $container := $containers }}
+    {{ range $j, $net := $container.Networks }}
+    {{ $port := or (trim (index $container.Labels "virtual.port")) "80" }}
+    to {{ $net.IP }}:{{ $port }}
+      {{ end }}
+    {{ end }}
+    header_up Host {{ $host }}
+    import proxy_headers
+  }
+  # --- Security Headers ---
+  import security_headers
+  # --- Block Sensitive Files ---
+  import block-sensitive-files
+  {{ end }}
+
+  log {
+    output stdout
+    level {{ $logLevel }}
+  }
+}
+{{ end }}
+{{ end }}
+
+:2015 {
+  metrics
+}
+
+{{ end }}
