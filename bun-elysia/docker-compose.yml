@@ -1,10 +1,10 @@
 #  docker-compose -f docker-compose.yml config check validate config
 version: "3.8"
 services:
-  yourbun-server:
+  your_server_name:
     build:
       context: ./bunpj
-      dockerfile: ./docker/
+      dockerfile: ../docker/Dockerfile
     image: yourdockeracc/yourbunserver:latest
     command: bun run dev
     working_dir: /app
@@ -14,14 +14,14 @@ services:
     # - "3000"
     restart: always
     labels:
-      com.docker.compose.project: "your_project_name"
-      virtual.host: "your_website.com"
+      com.docker.compose.project: "your_server_name"
+      virtual.host: "servicname.local.com"
       virtual.tls-email: your@email.com
       virtual.port: "3000"
     environment:
       VIRTUAL_HOST: "your_website.com"
       VIRTUAL_PORT: "3000"
-      LETSENCRYPT_HOST: "your_website.com"
+      LETSENCRYPT_HOST: "servicname.local.com"
       LETSENCRYPT_EMAIL: your@email.com
       TZ: Asia/Bangkok
     volumes:

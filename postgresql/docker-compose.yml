@@ -7,7 +7,9 @@ services:
     ports:
       - 5432:5432
     environment:
+      POSTGRES_USER: postgres          # ชื่อผู้ใช้ฐานข้อมูล
       POSTGRES_PASSWORD: dbpass_your_database_password
+      POSTGRES_DB: mydb              # ชื่อฐานข้อมูลที่จะสร้าง
       TZ: Asia/Bangkok
       PGTZ: Asia/Bangkok
     volumes:
