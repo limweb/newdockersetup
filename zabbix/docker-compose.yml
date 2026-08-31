@@ -1,0 +1,70 @@
+version: '3.5'
+
+services:
+  zabbix-mariadb:
+    image: mariadb:10.11
+    container_name: zabbix-mariadb
+    environment:
+      MARIADB_DATABASE: zabbix
+      MARIADB_USER: zabbix
+      MARIADB_PASSWORD: zabbix_password
+      MARIADB_ROOT_PASSWORD: root_password
+      TZ: "Asia/Bangkok"
+    volumes:
+      - ./zbx_env/var/lib/mysql:/var/lib/mysql
+    restart: always
+
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:ubuntu-latest
+    container_name: zabbix-server
+    # ports:
+    #   - "10051:10051"
+    labels:
+      com.docker.compose.project: "zabbix-server"
+      virtual.host: "zabbix-server.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "10051"      
+    environment:
+      DB_SERVER_HOST: zabbix-mariadb
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix_password
+      MYSQL_ROOT_PASSWORD: root_password
+      TZ: "Asia/Bangkok"
+    volumes:
+      - zbx_env:/usr/lib/zabbix/alertscripts
+    restart: always
+    depends_on:
+      - zabbix-mariadb
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-latest
+    container_name: zabbix-web
+    # ports:
+    #   - "8080:8080"
+    labels:
+      com.docker.compose.project: "zabbix-web"
+      virtual.host: "zabbix-web.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "8080"
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: zabbix-mariadb
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix_password
+      PHP_TZ: "Asia/Bangkok"
+      TZ: "Asia/Bangkok"
+    restart: always
+    depends_on:
+      - zabbix-mariadb
+      - zabbix-server
+
+volumes:
+  zbx_env:
+
+
+networks:
+  default:
+    external: true
+    name: proxy-network
