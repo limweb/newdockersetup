@@ -1,0 +1,53 @@
+services:
+  gitea-mysql:
+    image: docker.gitea.com/gitea:1.27.3
+    container_name: gitea-mysql
+    # ports:
+    #   - "3000:3000"
+    #   - "222:22"        
+    restart: always
+    labels:
+      com.docker.compose.project: "gitea"
+      virtual.host: "gitea.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "3000"
+
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=mysql
+      - GITEA__database__HOST=mysql-db:3306
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+      - TZ=Asia/Bangkok
+    volumes:
+      - gitea-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: docker.io/library/mysql:8
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea
+      - MYSQL_DATABASE=gitea
+      - TZ=Asia/Bangkok
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:    
+  gitea-data:
+    driver: local
+  mysql-data:
+    driver: local
+
+
+networks:
+  default:
+    external: true
+    name: proxy-network

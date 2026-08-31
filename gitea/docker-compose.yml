@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  gitea:
+    image: docker.gitea.com/gitea:1.27.3
+    container_name: gitea
+    restart: always    
+    ports:
+      - "3000:3000"
+      - "222:22"    
+    labels:
+      com.docker.compose.project: "gitea"
+      virtual.host: "gitea.local.com"
+      virtual.tls-email: your@email.com
+      virtual.port: "3000"
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - TZ=Asia/Bangkok
+    volumes:
+      - gitea-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+volumes:
+  gitea-data:
+    driver: local
+
+networks:
+  default:
+    external: true
+    name: proxy-network
