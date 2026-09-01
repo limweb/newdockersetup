@@ -8,10 +8,10 @@ services:
     environment:
       - RUNNER_NAME=${RUNNER_NAME:-self-hosted-runner}
       - RUNNER_TOKEN=${RUNNER_TOKEN}
-      - RUNNER_REPOSITORY_URL=${RUNNER_REPOSITORY_URL}
-      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,docker}
+      - REPO_URL=${REPO_URL}
+      - LABELS=${LABELS:-self-hosted,docker}
       - RUNNER_WORKDIR=/tmp/runner/work
-      - DOCKER_ENABLED=true
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - runner-work:/tmp/runner/work
