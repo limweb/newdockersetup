@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   openssh-server:
     image: devdotnetorg/openssh-server:ubuntu

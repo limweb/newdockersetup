@@ -1,5 +1,3 @@
-version: "3.8"
-
 volumes:
   #ถ้ามีการใช้ docker-compose ซ้ำ volumes ต้องไม่ซ้ำ
   # โดยเฉพาะ database   เช่น postgresql  vol เป็น sqldata

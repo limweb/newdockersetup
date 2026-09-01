@@ -1,6 +1,5 @@
 # docker-compose -f docker-compose.yml config check validate config
 # https://support.getgrist.com/self-managed/#self-hosted-grist
-version: "3.8"
 services:
   grist:
     image: gristlabs/grist

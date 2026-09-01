@@ -1,5 +1,3 @@
-version: "3.9"
-
 # ค่า flag มาตรฐานของ Penpot
 x-flags: &penpot-flags
   # **คำเตือน** ถ้าเอาออกอินเทอร์เน็ตควรลบ

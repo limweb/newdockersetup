@@ -2,7 +2,6 @@
 # การ proxy ใช้ socat หรือ nginx หรือ network mode เพื่อ bind port ของ container/host  ให้สามารถเข้าถึงได้จากภายนอก
 # ผ่าน virtual.host ที่กำหนดใน labels เพื่อให้ traefik สามารถ forward  traffic ไปยัง container ได้
 # มี 3 แบบ คือ socat, nginx, network mode ตามตัวอย่าง
-version: "3.8"
 services:
   # ใช้ socat เป็น proxy
   jarvis-proxy:

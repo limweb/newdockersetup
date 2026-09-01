@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   pd0:
     container_name: surrealdb-pd0

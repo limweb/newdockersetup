@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   nginxweb:
     image: "yourdockeracc/docker-nginx-fw74"

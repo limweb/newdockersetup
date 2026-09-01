@@ -2,7 +2,6 @@
 # You can use https://bcrypt-generator.com/ with default config and
 # https://www.base64encode.org/.)
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.8"
 services:
   webssh:
     image: "yourdockeracc/webssh:latest"

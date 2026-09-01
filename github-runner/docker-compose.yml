@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   github-runner:
     image: myoung34/github-runner:latest

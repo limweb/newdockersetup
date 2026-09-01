@@ -1,5 +1,4 @@
 #  docker-compose -f docker-compose.yml config check validate config
-version: "3.8"
 services:
   dockge:
     image: louislam/dockge:1

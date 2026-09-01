@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   docker-lemp:
     image: adhocore/lemp:7.4

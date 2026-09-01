@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   your_website.com:
     image: "webhippie/php-caddy:latest"

@@ -1,6 +1,5 @@
 #  docker-compose -f docker-compose.yml config check validate config
 #  ก่อนเรียก   export UID_GID="$(id -u):$(id -g)"
-version: "3.8"
 services:
   code-server:
     image: "codercom/code-server:latest"
