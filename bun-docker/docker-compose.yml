@@ -3,7 +3,7 @@ services:
   yourbun-server:
     build:
       context: ./bunpj
-      dockerfile: ./docker/
+      dockerfile: ../docker/Dockerfile
     image: yourdockeracc/yourbunserver:latest
     command: bun run dev
     working_dir: /app
@@ -24,8 +24,7 @@ services:
       LETSENCRYPT_EMAIL: your@email.com
       TZ: Asia/Bangkok
     volumes:
-      - ./public:/app/public
-      - ./src:/app/src
+      - ./bunpj:/app
     env_file:
       - ./bunpj/.env.prod
     logging:
