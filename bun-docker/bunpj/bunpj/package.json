@@ -7,11 +7,13 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@sinclair/typebox": "^0.32.0",
     "elysia": "latest"
   },
   "devDependencies": {
-    "@sinclair/typebox": "^0.32.0",
     "bun-types": "latest"
   },
   "module": "src/index.js"
 }
+
+
