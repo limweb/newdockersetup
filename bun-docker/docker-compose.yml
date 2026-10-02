@@ -6,6 +6,7 @@ services:
       dockerfile: ../docker/Dockerfile
     image: yourdockeracc/yourbunserver:latest
     command: bun run dev
+    # command: sh -c "bun install && bun run dev"
     working_dir: /app
     # ports:
     # - "3000:3000"
@@ -25,6 +26,7 @@ services:
       TZ: Asia/Bangkok
     volumes:
       - ./bunpj:/app
+      - /app/node_modules
     env_file:
       - ./bunpj/.env.prod
     logging:

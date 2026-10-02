@@ -10,7 +10,7 @@
     "elysia": "latest"
   },
   "devDependencies": {
-    "@sinclair/typebox": "^0.32.0",
+    "@sinclair/typebox": "^0.34.0",
     "bun-types": "latest"
   },
   "module": "src/index.js"
